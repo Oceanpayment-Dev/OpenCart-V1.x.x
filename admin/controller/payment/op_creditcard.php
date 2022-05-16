@@ -206,10 +206,10 @@ class ControllerPaymentOPCreditCard extends Controller {
 			$this->data['op_creditcard_pay_mode'] = $this->config->get('op_creditcard_pay_mode');
 		}
 		
-		if (isset($this->request->post['payment_op_creditcard_logs'])) {
-			$this->data['payment_op_creditcard_logs'] = $this->request->post['payment_op_creditcard_logs'];
+		if (isset($this->request->post['op_creditcard_logs'])) {
+			$this->data['op_creditcard_logs'] = $this->request->post['op_creditcard_logs'];
 		} else {
-			$this->data['payment_op_creditcard_logs'] = $this->config->get('payment_op_creditcard_logs');
+			$this->data['op_creditcard_logs'] = $this->config->get('op_creditcard_logs');
 		}
 		
 		if (isset($this->request->post['op_creditcard_default_order_status_id'])) {
