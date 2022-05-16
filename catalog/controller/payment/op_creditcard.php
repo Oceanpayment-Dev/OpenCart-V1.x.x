@@ -438,7 +438,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 					$payment_id.$payment_authType.$payment_status.$payment_details.$payment_risk.$securecode);
 			
 		
-			if($this->config->get('payment_op_creditcard_logs') == 'True'){
+			if($this->config->get('op_creditcard_logs') == 'True'){
 				//记录浏览器返回日志
 				$this->returnLog(self::BrowserReturn);
 			}
@@ -601,7 +601,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 		
 		
 		if($_REQUEST['response_type'] == 1){
-			if($this->config->get('payment_op_creditcard_logs') == 'True'){
+			if($this->config->get('op_creditcard_logs') == 'True'){
 				//记录交易推送日志
 				$this->returnLog(self::PUSH);
 			}
