@@ -438,9 +438,11 @@ class ControllerPaymentOPCreditCard extends Controller {
 					$payment_id.$payment_authType.$payment_status.$payment_details.$payment_risk.$securecode);
 			
 		
+			if($this->config->get('payment_op_creditcard_logs') == 'True'){
+				//记录浏览器返回日志
+				$this->returnLog(self::BrowserReturn);
+			}
 			
-			//记录浏览器返回日志
-			$this->returnLog(self::BrowserReturn);
 			
 
 			//是否来自移动端
@@ -599,9 +601,11 @@ class ControllerPaymentOPCreditCard extends Controller {
 		
 		
 		if($_REQUEST['response_type'] == 1){
+			if($this->config->get('payment_op_creditcard_logs') == 'True'){
+				//记录交易推送日志
+				$this->returnLog(self::PUSH);
+			}
 			
-			//记录交易推送日志
-			$this->returnLog(self::PUSH);
 			
 			//签名数据
 			$local_signValue = hash("sha256",$_REQUEST['account'].$_REQUEST['terminal'].$_REQUEST['order_number'].$_REQUEST['order_currency'].$_REQUEST['order_amount'].$_REQUEST['order_notes'].$_REQUEST['card_number'].
