@@ -34,6 +34,8 @@ class ControllerPaymentOPCreditCard extends Controller {
 		$this->data['text_3d_off'] = $this->language->get('text_3d_off');
 		$this->data['text_select_all'] = $this->language->get('text_select_all');
 		$this->data['text_unselect_all'] = $this->language->get('text_unselect_all');
+		$this->data['text_logs_true'] = $this->language->get('text_logs_true');
+		$this->data['text_logs_false'] = $this->language->get('text_logs_false');
 	
 		
 		$this->data['entry_account'] = $this->language->get('entry_account');
@@ -60,10 +62,11 @@ class ControllerPaymentOPCreditCard extends Controller {
 		$this->data['button_save'] = $this->language->get('button_save');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
 		
-		$data['entry_location'] = $this->language->get('entry_location');
-        $data['entry_locations'] = $this->language->get('entry_locations');
-        $data['entry_entity'] = $this->language->get('entry_entity');
-        $data['entry_entitys'] = $this->language->get('entry_entitys');
+		$this->data['entry_location'] = $this->language->get('entry_location');
+		$this->data['entry_locations'] = $this->language->get('entry_locations');
+		$this->data['entry_entity'] = $this->language->get('entry_entity');
+		$this->data['entry_entitys'] = $this->language->get('entry_entitys');
+		$this->data['entry_logs'] = $this->language->get('entry_logs');
 		
 		$this->data['text_show'] = $this->language->get('text_show');
 		$this->data['text_hide'] = $this->language->get('text_hide');
@@ -201,6 +204,12 @@ class ControllerPaymentOPCreditCard extends Controller {
 			$this->data['op_creditcard_pay_mode'] = $this->request->post['op_creditcard_pay_mode'];
 		} else {
 			$this->data['op_creditcard_pay_mode'] = $this->config->get('op_creditcard_pay_mode');
+		}
+		
+		if (isset($this->request->post['payment_op_creditcard_logs'])) {
+			$this->data['payment_op_creditcard_logs'] = $this->request->post['payment_op_creditcard_logs'];
+		} else {
+			$this->data['payment_op_creditcard_logs'] = $this->config->get('payment_op_creditcard_logs');
 		}
 		
 		if (isset($this->request->post['op_creditcard_default_order_status_id'])) {
