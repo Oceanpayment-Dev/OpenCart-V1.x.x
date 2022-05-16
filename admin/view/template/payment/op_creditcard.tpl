@@ -137,14 +137,14 @@
             </tr>
             	<tr>
               <td><?php echo $entry_logs; ?></td>
-              <td><select name="payment_op_creditcard_logs">
-                  <?php if ($payment_op_creditcard_logs == $text_logs_true) { ?>
+              <td><select name="op_creditcard_logs">
+                  <?php if ($op_creditcard_logs == $text_logs_true) { ?>
                   <option value="<?php echo $text_logs_true; ?>" selected="selected"><?php echo $text_logs_true; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $text_logs_true; ?>"><?php echo $text_logs_true; ?></option>
                   <?php } ?>
 
-                  <?php if ($payment_op_creditcard_logs == $text_logs_false) { ?>
+                  <?php if ($op_creditcard_logs == $text_logs_false) { ?>
                   <option value="<?php echo $text_logs_false; ?>" selected="selected"><?php echo $text_logs_false; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $text_logs_false; ?>"><?php echo $text_logs_false; ?></option>
