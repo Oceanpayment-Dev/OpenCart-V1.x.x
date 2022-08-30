@@ -17,7 +17,9 @@ $_['text_pay_redirect']  	= 'Redirect';
 $_['text_select_currency']  = '- Select -';
 $_['text_3d_on']    		= 'On';
 $_['text_3d_off'] 			= 'Off';
-      
+$_['text_logs_true'] 		= 'True';
+$_['text_logs_false'] 		= 'False';
+
 // Entry
 $_['entry_account']                   = 'Account:';
 $_['entry_terminal']                  = 'Terminal:';
@@ -39,6 +41,7 @@ $_['entry_status']                    = 'Status:';
 $_['entry_code']     				  = 'Response Code Mode:';
 $_['entry_sort_order']                = 'Sort Order:';
 
+$_['entry_logs']                      = 'Write The Logs';
 // Error
 $_['error_permission']                = 'Warning: You do not have permission to modify Oceanpayment creditcard!';
 $_['error_account']                   = 'Account Required!';
