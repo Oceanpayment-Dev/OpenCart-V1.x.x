@@ -3,7 +3,7 @@
         <img src="catalog/view/theme/default/image/loading.gif"  />
     </div>
 </div>
-<form action="<?php echo str_replace('&', '&amp;', $action); ?>" method="post" id="checkout_creditcard" name="checkout_creditcard">
+<form action="<?php echo str_replace('&', '&amp;', $action); ?>" method="post" id="checkout_alipay" name="checkout_alipay">
   <input type="hidden" name="account" value="<?php echo $account; ?>" />
   <input type="hidden" name="terminal" value="<?php echo $terminal; ?>" />
   <input type="hidden" name="order_number" value="<?php echo $order_number; ?>" />
@@ -41,5 +41,5 @@
   <input type="hidden" name="ET_COUPONS" value="<?php echo $ET_COUPONS; ?>" />
 </form>
 <script type="text/javascript">
-	document.getElementById('checkout_creditcard').submit();
+	document.getElementById('checkout_alipay').submit();
 </script>
