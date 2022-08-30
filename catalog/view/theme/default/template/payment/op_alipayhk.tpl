@@ -7,14 +7,14 @@
 	$("#button-confirm").bind("click",function(){
 		$.ajax({
 			type: "GET",
-			url: "index.php?route=payment/op_alipay/confirm",
+			url: "index.php?route=payment/op_alipayhk/confirm",
 			beforeSend: function() {
 			$('#button-confirm').attr('disabled', true);
 			$('#button-confirm').after('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
 		        },
 			success: function()
 			{
-			location = 'index.php?route=payment/op_alipay/op_alipay_form';
+			location = 'index.php?route=payment/op_alipayhk/op_alipayhk_form';
 			}
 		});
 	});

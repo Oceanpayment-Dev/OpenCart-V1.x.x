@@ -1,9 +1,12 @@
+<?php echo $header; ?>
+<div id="content" >
+<?php echo $content_top; ?>
 <div id="loading" style="position: relative;">
     <div style="position:absolute; top:100px; left:45%; z-index:3;" >
         <img src="catalog/view/theme/default/image/loading.gif"  />
     </div>
 </div>
-<form action="<?php echo str_replace('&', '&amp;', $action); ?>" method="post" id="checkout_alipay" name="checkout_alipay">
+<form action="<?php echo str_replace('&', '&amp;', $action); ?>" method="post" id="checkout_alipayhk" name="checkout_alipayhk">
   <input type="hidden" name="account" value="<?php echo $account; ?>" />
   <input type="hidden" name="terminal" value="<?php echo $terminal; ?>" />
   <input type="hidden" name="order_number" value="<?php echo $order_number; ?>" />
@@ -40,6 +43,31 @@
   <input type="hidden" name="ET_REGISTERDATE" value="<?php echo $ET_REGISTERDATE; ?>" />
   <input type="hidden" name="ET_COUPONS" value="<?php echo $ET_COUPONS; ?>" />
 </form>
+
+<iframe width="100%" height="340" scrolling="auto" name="ifrm_alipayhk_checkout" id="ifrm_alipayhk_checkout" style="border:none; margin: 0 auto; overflow:hidden;"></iframe>
+
 <script type="text/javascript">
-	document.getElementById('checkout_alipay').submit();
+<?php if($_SESSION['pages']=='0'){?>
+if (window.XMLHttpRequest) {
+document.checkout_alipayhk.target="ifrm_alipayhk_checkout";
+}
+<?php }?>
+document.checkout_alipayhk.submit();
+window.status = "<?php echo $action;?>";
 </script>
+<script type="text/javascript">
+    var ifrm_cc  = document.getElementById("ifrm_alipayhk_checkout");
+    var loading  = document.getElementById("loading");
+    if (ifrm_cc.attachEvent){
+        ifrm_cc.attachEvent("onload", function(){
+            loading.style.display = 'none';
+        });
+    } else {
+        ifrm_cc.onload = function(){
+            loading.style.display = 'none';   		
+        };
+    }
+</script>
+
+</div>
+<?php echo $footer; ?>

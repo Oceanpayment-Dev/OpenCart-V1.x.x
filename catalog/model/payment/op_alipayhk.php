@@ -1,14 +1,14 @@
 <?php 
-class ModelPaymentOPAlipay extends Model {
+class ModelPaymentOPAlipayhk extends Model {
 	private $_limit = ',';
 	
   	public function getMethod($address) {
-		$this->load->language('payment/op_alipay');
+		$this->load->language('payment/op_alipayhk');
 		
-		if ($this->config->get('op_alipay_status')) {
-      		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('op_alipay_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		if ($this->config->get('op_alipayhk_status')) {
+      		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('op_alipayhk_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 			
-			if (!$this->config->get('op_alipay_geo_zone_id')) {
+			if (!$this->config->get('op_alipayhk_geo_zone_id')) {
         		$status = TRUE;
       		} elseif ($query->num_rows) {
       		  	$status = TRUE;
@@ -23,9 +23,9 @@ class ModelPaymentOPAlipay extends Model {
 	
 		if ($status) {  
       		$method_data = array( 
-        		'code'         => 'op_alipay',
+        		'code'         => 'op_alipayhk',
         		'title'      => $this->language->get('text_title'),
-				'sort_order' => $this->config->get('op_alipay_sort_order')
+				'sort_order' => $this->config->get('op_alipayhk_sort_order')
       		);
     	}
    
