@@ -10,6 +10,8 @@ $_['text_pay']           	= 'https://secure.oceanpayment.com/gateway/service/pay
 $_['text_test']          	= 'https://secure.oceanpayment.com/gateway/service/test';
 $_['text_pay_iframe']    	= 'Iframe';
 $_['text_pay_redirect']  	= 'Redirect';
+$_['text_code_online']    	= 'Online';
+$_['text_code_local'] 	 	= 'Local';
 $_['text_pay_iframe']    	= 'Iframe';
 $_['text_pay_redirect']  	= 'Redirect';
 $_['text_select_currency']  = '- Select -';
@@ -34,19 +36,8 @@ $_['entry_failed_order_status']       = 'Failed Order Status:';
 $_['entry_pending_order_status']      = 'Pending Order Status:';
 $_['entry_geo_zone']                  = 'Geo Zone:';
 $_['entry_status']                    = 'Status:';
+$_['entry_code']     				  = 'Response Code Mode:';
 $_['entry_sort_order']                = 'Sort Order:';
-
-
-$_['text_hide']        = 'Hide';
-$_['text_show']          = 'Show';
-$_['text_hides']          = 'Hide';
-$_['text_shows']         = 'Show';
-
-$_['entry_location']           = 'Show/Hide Location';
-$_['entry_locations']             = 'Location';
-$_['entry_entity']            = 'Show/Hide Entity';
-$_['entry_entitys']           = 'Entity';
-
 
 // Error
 $_['error_permission']                = 'Warning: You do not have permission to modify Oceanpayment creditcard!';

@@ -30,6 +30,8 @@ class ControllerPaymentOPCreditCard extends Controller {
 		$this->data['text_pay_redirect'] = $this->language->get('text_pay_redirect');
 		$this->data['text_pay_iframe'] = $this->language->get('text_pay_iframe');
 		$this->data['text_select_currency'] = $this->language->get('text_select_currency');
+		$this->data['text_code_online'] = $this->language->get('text_code_online');
+		$this->data['text_code_local'] = $this->language->get('text_code_local');
 		$this->data['text_3d_on'] = $this->language->get('text_3d_on');
 		$this->data['text_3d_off'] = $this->language->get('text_3d_off');
 		$this->data['text_select_all'] = $this->language->get('text_select_all');
@@ -54,23 +56,12 @@ class ControllerPaymentOPCreditCard extends Controller {
 		$this->data['entry_pending_order_status']=$this->language->get('entry_pending_order_status');
 		
 		$this->data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
+		$this->data['entry_code'] = $this->language->get('entry_code');
 		$this->data['entry_status'] = $this->language->get('entry_status');
 		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
 
 		$this->data['button_save'] = $this->language->get('button_save');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
-		
-		$data['entry_location'] = $this->language->get('entry_location');
-        $data['entry_locations'] = $this->language->get('entry_locations');
-        $data['entry_entity'] = $this->language->get('entry_entity');
-        $data['entry_entitys'] = $this->language->get('entry_entitys');
-		
-		$this->data['text_show'] = $this->language->get('text_show');
-		$this->data['text_hide'] = $this->language->get('text_hide');
-
-		$this->data['text_shows'] = $this->language->get('text_shows');
-		$this->data['text_hides'] = $this->language->get('text_hides');
-
 
 
 
@@ -240,6 +231,11 @@ class ControllerPaymentOPCreditCard extends Controller {
 										
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
+		if (isset($this->request->post['op_creditcard_code'])) {
+			$this->data['op_creditcard_code'] = $this->request->post['op_creditcard_code'];
+		} else {
+			$this->data['op_creditcard_code'] = $this->config->get('op_creditcard_code');
+		}
 
 		if (isset($this->request->post['op_creditcard_status'])) {
 			$this->data['op_creditcard_status'] = $this->request->post['op_creditcard_status'];
@@ -252,38 +248,6 @@ class ControllerPaymentOPCreditCard extends Controller {
 		} else {
 			$this->data['op_creditcard_sort_order'] = $this->config->get('op_creditcard_sort_order');
 		}
-		
-		if (isset($this->request->post['op_creditcard_location'])) {
-          $data['op_creditcard_location'] = $this->request->post['op_creditcard_location'];
-      } else {
-          $data['op_creditcard_location'] = $this->config->get('op_creditcard_location');
-      }
-
-      if (isset($this->request->post['op_creditcard_locations'])) {
-          $data['op_creditcard_locations'] = $this->request->post['op_creditcard_locations'];
-      } else {
-          $data['op_creditcard_locations'] = $this->config->get('op_creditcard_locations');
-      }
-
-      if (isset($this->request->post['op_creditcard_entity'])) {
-          $data['op_creditcard_entity'] = $this->request->post['op_creditcard_entity'];
-      } else {
-          $data['op_creditcard_entity'] = $this->config->get('op_creditcard_entity');
-      }
-
-      if (isset($this->request->post['op_creditcard_entitys'])) {
-          $data['op_creditcard_entitys'] = $this->request->post['op_creditcard_entitys'];
-      } else {
-          $data['op_creditcard_entitys'] = $this->config->get('op_creditcard_entitys');
-      }
-
-	  //存入session
-      $this->session->data['op_creditcard_location'] = $data['op_creditcard_location'];
-      $this->session->data['op_creditcard_locations'] = $data['op_creditcard_locations'];
-      $this->session->data['op_creditcard_entity'] = $data['op_creditcard_entity'];
-      $this->session->data['op_creditcard_entitys'] = $data['op_creditcard_entitys'];
-
-
 		
 		$this->template = 'payment/op_creditcard.tpl';
 		$this->children = array(

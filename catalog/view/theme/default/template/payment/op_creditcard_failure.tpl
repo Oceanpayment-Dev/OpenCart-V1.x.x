@@ -22,7 +22,7 @@ function auto(){
   </div>
   <p><?php echo $text_failure; ?></p>
   <p><?php echo $payment_details; ?></p>
-  <p><?php echo $payment_solutions; ?></p>
+  <p><?php echo $actionMsg; ?></p>
   <p><?php echo $text_failure_wait; ?></p>
 </div>
 </body>

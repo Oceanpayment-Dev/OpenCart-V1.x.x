@@ -198,6 +198,18 @@
                 </select></td>
             </tr>
             <tr>
+              <td><?php echo $entry_code; ?></td>
+              <td><select name="op_creditcard_code">
+                  <?php if ($op_creditcard_code) { ?>
+                  <option value="1" selected="selected"><?php echo $text_code_online; ?></option>
+                  <option value="0"><?php echo $text_code_local; ?></option>
+                  <?php } else { ?>
+                  <option value="1"><?php echo $text_code_online; ?></option>
+                  <option value="0" selected="selected"><?php echo $text_code_local; ?></option>
+                  <?php } ?>
+                </select></td>
+            </tr>
+            <tr>
               <td><?php echo $entry_status; ?></td>
               <td><select name="op_creditcard_status">
                   <?php if ($op_creditcard_status) { ?>
@@ -213,40 +225,6 @@
               <td><?php echo $entry_sort_order; ?></td>
               <td><input type="text" name="op_creditcard_sort_order" value="<?php echo $op_creditcard_sort_order; ?>" size="1" /></td>
             </tr>
-			
-			<tr>
-              <td><?php echo $entry_status; ?></td>
-              <td><select name="op_creditcard_location">
-                  <?php if ($op_creditcard_location) { ?>
-                  <option value="1" selected="selected"><?php echo $text_show; ?></option>
-                  <option value="0"><?php echo $text_hide; ?></option>
-                  <?php } else { ?>
-                  <option value="1"><?php echo $text_show; ?></option>
-                  <option value="0" selected="selected"><?php echo $text_hide; ?></option>
-                  <?php } ?>
-                </select></td>
-            </tr>
-			<tr>
-              <td><?php echo $entry_locations; ?></td>
-              <td><input type="text" name="op_creditcard_locations" value="<?php echo $op_creditcard_locations; ?>" size="1" /></td>
-            </tr>
-			<tr>
-              <td><?php echo $entry_entity; ?></td>
-              <td><select name="op_creditcard_entity">
-                  <?php if ($op_creditcard_entity) { ?>
-                  <option value="1" selected="selected"><?php echo $text_shows; ?></option>
-                  <option value="0"><?php echo $text_hides; ?></option>
-                  <?php } else { ?>
-                  <option value="1"><?php echo $text_shows; ?></option>
-                  <option value="0" selected="selected"><?php echo $text_hides; ?></option>
-                  <?php } ?>
-                </select></td>
-            </tr>
-			<tr>
-              <td><?php echo $entry_entitys; ?></td>
-              <td><input type="text" name="op_creditcard_entitys" value="<?php echo $op_creditcard_entitys; ?>" size="1" /></td>
-            </tr>
-			
           </table>
         </form>
       </div>

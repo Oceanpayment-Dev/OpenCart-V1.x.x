@@ -3,6 +3,7 @@ include_once(DIR_APPLICATION."controller/payment/Mobile_Detect.php");
 class ControllerPaymentOPCreditCard extends Controller {
 	const PUSH 			= "[PUSH]";
 	const BrowserReturn = "[Browser Return]";
+	const Abnormal 		= "[Abnormal]";
 	
 	public function confirm()
 	{
@@ -184,7 +185,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 			$this->data['billing_address'] = $billing_address;
 			 
 			//账单人邮编
-			$billing_zip = $order_info['payment_postcode'];
+			$billing_zip = empty($order_info['payment_postcode']) ? '999999' : $order_info['payment_postcode'];
 			$this->data['billing_zip'] = $billing_zip;
 			
 			//加密串
@@ -224,7 +225,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 			$this->data['ship_addr'] = $ship_addr;
 				
 			//收货人邮编
-			$ship_zip = $order_info['shipping_postcode'];
+			$ship_zip = empty($order_info['shipping_postcode']) ? '999999' : $order_info['shipping_postcode'];
 			$this->data['ship_zip'] = $ship_zip;
 			
 			//产品名称
@@ -244,7 +245,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 			$this->data['cart_info'] = $cart_info;
 			
 			//API版本
-			$cart_api = 'V1.7.1';
+			$cart_api = 'V1.6.2';
 			$this->data['cart_api'] = $cart_api;
 			
 			//支付页面样式
@@ -390,16 +391,20 @@ class ControllerPaymentOPCreditCard extends Controller {
 			$card_number = $this->request->post['card_number'];
 			$payment_authType = $this->request->post['payment_authType'];
 			$payment_risk = $this->request->post['payment_risk'];
-			$payment_solutions = $this->request->post['payment_solutions'];
-				
+			$code_mode = $this->config->get('op_creditcard_code');
+			
 			
 			//用于支付结果页面显示响应代码
 			$getErrorCode = explode(':', $payment_details);
 			$ErrorCode = $getErrorCode[0];
 			$this->data['op_errorCode'] = $ErrorCode;
 			$this->data['payment_details'] = $payment_details;
-			$this->data['payment_solutions'] = $payment_solutions;
 			
+			if($code_mode == 1){
+				$this->data['actionMsg'] = $this->getActionMessage($ErrorCode);
+			}elseif($code_mode == 0){
+				$this->data['actionMsg'] = $this->getLocalMessage($ErrorCode);
+			}
 	
 			
 			//匹配终端号   记录是否3D交易
@@ -416,21 +421,6 @@ class ControllerPaymentOPCreditCard extends Controller {
 				$text_is_3d = '';
 			}
 			
-			if($this->session->data['op_creditcard_location'] == '1'){
-				$data['op_creditcard_locations']  =	$this->session->data['op_creditcard_locations'];
-                $data['op_creditcard_location']   = 1;
-			}else{
-                $data['op_creditcard_location']   = 0;
-			}
-
-            if($this->session->data['op_creditcard_entity'] == '1'){
-                $data['op_creditcard_entitys']  =	 $this->session->data['op_creditcard_entitys'];
-                $data['op_creditcard_entity']   = 1;
-			}else{
-                $data['op_creditcard_entity']   = 0;
-			}
-
-			
 		
 			
 			//签名数据		
@@ -439,7 +429,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 			
 		
 			
-			//记录浏览器返回日志
+			//浏览器返回类型
 			$this->returnLog(self::BrowserReturn);
 			
 
@@ -537,13 +527,6 @@ class ControllerPaymentOPCreditCard extends Controller {
 		
 		$this->response->setOutput($this->render(TRUE), $this->config->get('config_compression'));
 		
-		unset($data['op_creditcard_location']);
-      unset($data['op_creditcard_locations']);
-      unset($data['op_creditcard_entity']);
-      unset($data['op_creditcard_entitys']);
-
-
-		
 	}
 	
 	
@@ -556,29 +539,34 @@ class ControllerPaymentOPCreditCard extends Controller {
 		
 		//判断返回的输入流是否为xml
 		if($this->xml_parser($xml_str)){
-			$xml = simplexml_load_string($xml_str);
+			$xml = new DOMDocument();
+			$xml->loadXML($xml_str);
 		
-			error_reporting(0);
-			
 			//把推送参数赋值到$_REQUEST
-			$_REQUEST['response_type']	  = (string)$xml->response_type;
-			$_REQUEST['account']		  = (string)$xml->account;
-			$_REQUEST['terminal'] 	      = (string)$xml->terminal;
-			$_REQUEST['payment_id'] 	  = (string)$xml->payment_id;
-			$_REQUEST['order_number']     = (string)$xml->order_number;
-			$_REQUEST['order_currency']   = (string)$xml->order_currency;
-			$_REQUEST['order_amount']     = (string)$xml->order_amount;
-			$_REQUEST['payment_status']   = (string)$xml->payment_status;
-			$_REQUEST['payment_details']  = (string)$xml->payment_details;
-			$_REQUEST['signValue'] 	      = (string)$xml->signValue;
-			$_REQUEST['order_notes']	  = (string)$xml->order_notes;
-			$_REQUEST['card_number']	  = (string)$xml->card_number;
-			$_REQUEST['payment_authType'] = (string)$xml->payment_authType;
-			$_REQUEST['payment_risk'] 	  = (string)$xml->payment_risk;
-			$_REQUEST['methods'] 	  	  = (string)$xml->methods;
-			$_REQUEST['payment_country']  = (string)$xml->payment_country;
-			$_REQUEST['payment_solutions']= (string)$xml->payment_solutions;
-				
+			$_REQUEST['response_type']	  = $xml->getElementsByTagName("response_type")->item(0)->nodeValue;
+			$_REQUEST['account']		  = $xml->getElementsByTagName("account")->item(0)->nodeValue;
+			$_REQUEST['terminal'] 	      = $xml->getElementsByTagName("terminal")->item(0)->nodeValue;
+			$_REQUEST['payment_id'] 	  = $xml->getElementsByTagName("payment_id")->item(0)->nodeValue;
+			$_REQUEST['order_number']     = $xml->getElementsByTagName("order_number")->item(0)->nodeValue;
+			$_REQUEST['order_currency']   = $xml->getElementsByTagName("order_currency")->item(0)->nodeValue;
+			$_REQUEST['order_amount']     = $xml->getElementsByTagName("order_amount")->item(0)->nodeValue;
+			$_REQUEST['payment_status']   = $xml->getElementsByTagName("payment_status")->item(0)->nodeValue;
+			$_REQUEST['payment_details']  = $xml->getElementsByTagName("payment_details")->item(0)->nodeValue;
+			$_REQUEST['signValue'] 	      = $xml->getElementsByTagName("signValue")->item(0)->nodeValue;
+			$_REQUEST['order_notes']	  = $xml->getElementsByTagName("order_notes")->item(0)->nodeValue;
+			$_REQUEST['card_number']	  = $xml->getElementsByTagName("card_number")->item(0)->nodeValue;
+			$_REQUEST['methods']	      = $xml->getElementsByTagName("methods")->item(0)->nodeValue;
+			$_REQUEST['payment_country']  = $xml->getElementsByTagName("payment_country")->item(0)->nodeValue;
+			$_REQUEST['payment_authType'] = $xml->getElementsByTagName("payment_authType")->item(0)->nodeValue;
+			$_REQUEST['payment_risk'] 	  = $xml->getElementsByTagName("payment_risk")->item(0)->nodeValue;
+		
+			$_REQUEST['notice_type'] 	  = $xml->getElementsByTagName("notice_type")->item(0)->nodeValue;
+			$_REQUEST['payment_dateTime'] = $xml->getElementsByTagName("payment_dateTime")->item(0)->nodeValue;
+			$_REQUEST['push_dateTime'] 	  = $xml->getElementsByTagName("push_dateTime")->item(0)->nodeValue;
+			$_REQUEST['push_id'] 	  	  = $xml->getElementsByTagName("push_id")->item(0)->nodeValue;
+			$_REQUEST['push_status'] 	  = $xml->getElementsByTagName("push_status")->item(0)->nodeValue;
+			$_REQUEST['push_details'] 	  = $xml->getElementsByTagName("push_details")->item(0)->nodeValue;
+		
 				
 			//匹配终端号   记录是否3D交易
 			if($_REQUEST['terminal'] == $this->config->get('op_creditcard_terminal')){
@@ -600,7 +588,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 		
 		if($_REQUEST['response_type'] == 1){
 			
-			//记录交易推送日志
+			//交易推送类型
 			$this->returnLog(self::PUSH);
 			
 			//签名数据
@@ -650,12 +638,78 @@ class ControllerPaymentOPCreditCard extends Controller {
 					}
 				}	
 			}
-			
-			echo "receive-ok";
-			
 		}
 		
-	
+		
+		if(isset($_REQUEST['notice_type'])){
+			
+			//异常交易推送类型
+			$this->AbnormalLog(self::Abnormal);
+			
+			//SHA256加密
+			$local_signValue   = hash("sha256",$_REQUEST['account'].$_REQUEST['terminal'].$_REQUEST['order_number'].$_REQUEST['payment_id'].$_REQUEST['push_id'].$_REQUEST['push_status'].$_REQUEST['push_details'].$securecode);
+				
+			//数据签名对比
+			if (strtoupper($local_signValue) == strtoupper($_REQUEST['signValue'])) {
+			
+				switch($_REQUEST['notice_type']){
+					case 'refund':
+						//退款
+						if($_REQUEST['push_status'] == 1){
+							$AbnormalResult = 'Refund Successful.';
+						}elseif($_REQUEST['push_status'] == 0){
+							$AbnormalResult = 'Refund Failed.';
+						}
+			
+						break;
+					case 'chargeBack':
+						//拒付
+						if($_REQUEST['push_status'] == 1){
+							$AbnormalResult = 'ChargeBack!';
+						}
+			
+						break;
+					case 're-presentment':
+						//申诉
+						if($_REQUEST['push_status'] == 1){
+							$AbnormalResult = 'Re-presentment Successful.';
+						}elseif($_REQUEST['push_status'] == 0){
+							$AbnormalResult = 'Re-presentment Failed.';
+						}elseif($_REQUEST['push_status'] == 2){
+							$AbnormalResult = 'Re-presentment Pending.';
+						}
+			
+						break;
+					case 'retrieval':
+						//调单
+						if($_REQUEST['push_status'] == 1){
+							$AbnormalResult = 'Retrieval!';
+						}
+							
+						break;
+					case 'reversal-retrieval':
+						//调单变正常
+						if($_REQUEST['push_status'] == 1){
+							$AbnormalResult = 'Reversal-retrieval!';
+						}
+							
+						break;
+					default:
+						$AbnormalResult = '';
+				}
+			
+				$this->load->model('checkout/order');
+			
+				$message = '';
+				$message .= self::Abnormal . $AbnormalResult;
+				$message .= 'payment_id:' . $_REQUEST['payment_id'] . ' | push_id:' . $_REQUEST['push_id'] . ' | push_dateTime:' . $_REQUEST['push_dateTime'] . ' | details:' . $_REQUEST['push_details'] . "\n";
+			
+				//获取原本的订单状态
+				$order_info = $this->model_checkout_order->getOrder($_REQUEST['order_number']);
+				$this->model_checkout_order->update($_REQUEST['order_number'], $order_info['order_status_id'], $message, false);
+			}
+		}
+
 		
 	}
 	
@@ -762,8 +816,7 @@ class ControllerPaymentOPCreditCard extends Controller {
 				"methods = "    		 . $_REQUEST['methods'] . "\r\n".
 				"payment_country = "     . $_REQUEST['payment_country'] . "\r\n".
 				"payment_authType = "    . $_REQUEST['payment_authType'] . "\r\n".
-				"payment_risk = "        . $_REQUEST['payment_risk'] . "\r\n".
-				"payment_solutions = "   . $_REQUEST['payment_solutions'] . "\r\n";
+				"payment_risk = "        . $_REQUEST['payment_risk'] . "\r\n";
 	
 		$return_log = $return_log . "*************************************\r\n";			
 		$return_log = $return_log.file_get_contents( "oceanpayment_log/" . $filedate . ".log");			
@@ -775,7 +828,40 @@ class ControllerPaymentOPCreditCard extends Controller {
 	}
 	
 	
-
+	
+	/**
+	 * Abnormal log
+	 */
+	public function abnormalLog($logType){
+	
+		$filedate   = $logType . date('Y-m-d');
+		$returndate = date('Y-m-d H:i:s');
+		$newfile    = fopen( "oceanpayment_log/" . $filedate . ".log", "a+" );
+		$return_log = $returndate . $logType . "\r\n".
+				"notice_type = "       	 . $_REQUEST['notice_type'] . "\r\n".
+				"account = "             . $_REQUEST['account'] . "\r\n".
+				"terminal = "            . $_REQUEST['terminal'] . "\r\n".
+				"payment_id = "          . $_REQUEST['payment_id'] . "\r\n".
+				"order_number = "        . $_REQUEST['order_number'] . "\r\n".
+				"push_id = "      		 . $_REQUEST['push_id'] . "\r\n".
+				"push_status = "         . $_REQUEST['push_status'] . "\r\n".
+				"payment_dateTme = "    . $_REQUEST['payment_dateTime'] . "\r\n".
+				"push_dateTime = "       . $_REQUEST['push_dateTime'] . "\r\n".
+				"push_details = "        . $_REQUEST['push_details'] . "\r\n".
+				"signValue = "        	 . $_REQUEST['signValue'] . "\r\n";
+	
+		$return_log = $return_log . "*************************************\r\n";
+		$return_log = $return_log.file_get_contents( "oceanpayment_log/" . $filedate . ".log");
+		$filename   = fopen( "oceanpayment_log/" . $filedate . ".log", "r+" );
+		fwrite($filename,$return_log);
+		fclose($filename);
+		fclose($newfile);
+	
+	}	
+	
+	
+	
+	
 	
 	/**
 	 *  判断是否为xml
@@ -791,6 +877,101 @@ class ControllerPaymentOPCreditCard extends Controller {
 	}
 	
 	
+	
+	/**
+	 *  响应代码解决方案
+	 */
+	public function getActionMessage($ErrorCode)
+	{
+		//获取线上的响应代码解决方案信息
+		$oceanpayment_url = 'http://www.oceanpayment.com.cn/TransResponseCode.php';
+			
+		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+			
+		$data = array(
+				'code' => $ErrorCode,
+				'lang' => $lang
+		);
+
+			
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_URL,$oceanpayment_url);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_TIMEOUT,5);
+			
+		if (curl_errno($ch)) {
+			//超时则获取插件本身
+			$op_actionMsg = $this->getLocalMessage($ErrorCode);
+		}else{
+			$op_actionMsg = curl_exec($ch);
+		}
+				
+	
+		return $op_actionMsg;
+	}
+	
+	
+	
+	
+	/**
+	 *  获取插件本身的的响应代码解决方案信息
+	 *	更新日期2015-04-12
+	 */
+	public function getLocalMessage($ErrorCode)
+	{
+		$this->language->load('payment/op_creditcard');
+		
+		$CodeAction = array(
+				'80010' => $this->language->get('text_actionMsg_1'),
+				'80011' => $this->language->get('text_actionMsg_1'),
+				'80012' => $this->language->get('text_actionMsg_1'),
+				'80013' => $this->language->get('text_actionMsg_1'),
+				'80014' => $this->language->get('text_actionMsg_2'),
+				'80020' => $this->language->get('text_actionMsg_3'),
+				'80021' => $this->language->get('text_actionMsg_4'),
+				'80022' => $this->language->get('text_actionMsg_5'),
+				'80023' => $this->language->get('text_actionMsg_6'),
+				'80024' => $this->language->get('text_actionMsg_7'),
+				'80025' => $this->language->get('text_actionMsg_1'),
+				'80026' => $this->language->get('text_actionMsg_8'),
+				'80027' => $this->language->get('text_actionMsg_9'),
+				'80028' => $this->language->get('text_actionMsg_10'),
+				'80030' => $this->language->get('text_actionMsg_1'),
+				'80031' => $this->language->get('text_actionMsg_11'),
+				'80032' => $this->language->get('text_actionMsg_12'),
+				'80033' => $this->language->get('text_actionMsg_12'),
+				'80034' => $this->language->get('text_actionMsg_12'),
+				'80035' => $this->language->get('text_actionMsg_12'),
+				'80036' => $this->language->get('text_actionMsg_13'),
+				'80037' => $this->language->get('text_actionMsg_12'),
+				'80050' => $this->language->get('text_actionMsg_14'),
+				'80051' => $this->language->get('text_actionMsg_15'),
+				'80054' => $this->language->get('text_actionMsg_12'),
+				'80061' => $this->language->get('text_actionMsg_12'),
+				'80062' => $this->language->get('text_actionMsg_12'),
+				'80063' => $this->language->get('text_actionMsg_12'),
+				'80064' => $this->language->get('text_actionMsg_12'),
+				'80090' => $this->language->get('text_actionMsg_16'),
+				'80091' => $this->language->get('text_actionMsg_17'),
+				'80092' => $this->language->get('text_actionMsg_18'),
+				'80100' => $this->language->get('text_actionMsg_19'),
+				'80101' => $this->language->get('text_actionMsg_20'),
+				'80120' => $this->language->get('text_actionMsg_21'),
+				'80121' => $this->language->get('text_actionMsg_21'),
+				'80200' => $this->language->get('text_actionMsg_22'),
+		);
+	
+		
+		if(isset($CodeAction[$ErrorCode])){
+			$op_actionMsg = $CodeAction[$ErrorCode];
+		}else{
+			$op_actionMsg = '';
+		}
+		
+		return $op_actionMsg;
+	
+	}
 	
 	
 	

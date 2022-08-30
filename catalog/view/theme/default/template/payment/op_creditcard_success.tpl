@@ -22,14 +22,6 @@ function auto(){
   </div>
   <p><?php echo $text_success; ?></p>
   <p><?php echo 'Your Order No. is:'.$text_order_number; ?></p>
-  <?php if($op_creditcard_location == 1) { ?>
-  <p><?php echo 'Outlet Location:'.$op_creditcard_locations; ?></p>
-  <?php  }?>
-
-  <?php if($op_creditcard_location == 1) { ?>
-  <p><?php echo 'Entity:'.$op_creditcard_entitys; ?></p>
-  <?php  }?>
-
   <p><?php echo $text_success_wait; ?></p>
 
 </div>
