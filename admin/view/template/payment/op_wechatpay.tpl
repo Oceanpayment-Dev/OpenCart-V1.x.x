@@ -18,35 +18,35 @@
           <table class="form">
             <tr>
               <td><span class="required">*</span> <?php echo $entry_account; ?></td>
-              <td><input type="text" name="op_alipayhk_account" value="<?php echo $op_alipayhk_account; ?>" />
+              <td><input type="text" name="op_wechatpay_account" value="<?php echo $op_wechatpay_account; ?>" />
                 <?php if ($error_account) { ?>
                 <span class="error"><?php echo $error_account; ?></span>
                 <?php } ?></td>
             </tr>
 	     <tr>
               <td><span class="required">*</span> <?php echo $entry_terminal; ?></td>
-              <td><input type="text" name="op_alipayhk_terminal" value="<?php echo $op_alipayhk_terminal; ?>" />
+              <td><input type="text" name="op_wechatpay_terminal" value="<?php echo $op_wechatpay_terminal; ?>" />
                 <?php if ($error_terminal) { ?>
                 <span class="error"><?php echo $error_terminal; ?></span>
                 <?php } ?></td>
             </tr>
             <tr>
               <td><span class="required">*</span> <?php echo $entry_securecode; ?></td>
-              <td><input type="text" name="op_alipayhk_securecode" value="<?php echo $op_alipayhk_securecode; ?>" />
+              <td><input type="text" name="op_wechatpay_securecode" value="<?php echo $op_wechatpay_securecode; ?>" />
                 <?php if ($error_securecode) { ?>
                 <span class="error"><?php echo $error_securecode; ?></span>
                 <?php } ?></td>
             </tr>
             <tr>
               <td><?php echo $entry_transaction; ?></td>
-              <td><select name="op_alipayhk_transaction">
-                  <?php if ($op_alipayhk_transaction == $text_pay) { ?>
+              <td><select name="op_wechatpay_transaction">
+                  <?php if ($op_wechatpay_transaction == $text_pay) { ?>
                   <option value="<?php echo $text_pay; ?>" selected="selected"><?php echo $text_pay; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $text_pay; ?>"><?php echo $text_pay; ?></option>
                   <?php } ?>
 
-                  <?php if ($op_alipayhk_transaction == $text_test) { ?>
+                  <?php if ($op_wechatpay_transaction == $text_test) { ?>
                   <option value="<?php echo $text_test; ?>" selected="selected"><?php echo $text_test; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $text_test; ?>"><?php echo $text_test; ?></option>
@@ -56,14 +56,14 @@
   
   			<tr>
               <td><?php echo $entry_pay_mode; ?></td>
-              <td><select name="op_alipayhk_pay_mode">
-                  <?php if ($op_alipayhk_pay_mode == 1) { ?>
+              <td><select name="op_wechatpay_pay_mode">
+                  <?php if ($op_wechatpay_pay_mode == 1) { ?>
                   <option value="1" selected="selected"><?php echo $text_pay_iframe; ?></option>
                   <?php } else { ?>
                   <option value="1"><?php echo $text_pay_iframe; ?></option>
                   <?php } ?>
 
-                  <?php if ($op_alipayhk_pay_mode == 0) { ?>
+                  <?php if ($op_wechatpay_pay_mode == 0) { ?>
                   <option value="0" selected="selected"><?php echo $text_pay_redirect; ?></option>
                   <?php } else { ?>
                   <option value="0"><?php echo $text_pay_redirect; ?></option>
@@ -73,9 +73,9 @@
             	
             <tr>
               <td><?php echo $entry_default_order_status; ?></td>
-              <td><select name="op_alipayhk_default_order_status_id">
+              <td><select name="op_wechatpay_default_order_status_id">
                   <?php foreach ($order_statuses as $order_status) { ?>
-                  <?php if ($order_status['order_status_id'] == $op_alipayhk_default_order_status_id) { ?>
+                  <?php if ($order_status['order_status_id'] == $op_wechatpay_default_order_status_id) { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
@@ -85,9 +85,9 @@
             </tr>
     		<tr>
               <td><?php echo $entry_success_order_status; ?></td>
-              <td><select name="op_alipayhk_success_order_status_id">
+              <td><select name="op_wechatpay_success_order_status_id">
                   <?php foreach ($order_statuses as $order_status) { ?>
-                  <?php if ($order_status['order_status_id'] == $op_alipayhk_success_order_status_id) { ?>
+                  <?php if ($order_status['order_status_id'] == $op_wechatpay_success_order_status_id) { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
@@ -97,9 +97,9 @@
             </tr>
     		<tr>
               <td><?php echo $entry_failed_order_status; ?></td>
-              <td><select name="op_alipayhk_failed_order_status_id">
+              <td><select name="op_wechatpay_failed_order_status_id">
                   <?php foreach ($order_statuses as $order_status) { ?>
-                  <?php if ($order_status['order_status_id'] == $op_alipayhk_failed_order_status_id) { ?>
+                  <?php if ($order_status['order_status_id'] == $op_wechatpay_failed_order_status_id) { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
@@ -109,9 +109,9 @@
             </tr>
             <tr>
               <td><?php echo $entry_pending_order_status; ?></td>
-              <td><select name="op_alipayhk_pending_order_status_id">
+              <td><select name="op_wechatpay_pending_order_status_id">
                   <?php foreach ($order_statuses as $order_status) { ?>
-                  <?php if ($order_status['order_status_id'] == $op_alipayhk_pending_order_status_id) { ?>
+                  <?php if ($order_status['order_status_id'] == $op_wechatpay_pending_order_status_id) { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
@@ -121,10 +121,10 @@
             </tr>
             <tr>
               <td><?php echo $entry_geo_zone; ?></td>
-              <td><select name="op_alipayhk_geo_zone_id">
+              <td><select name="op_wechatpay_geo_zone_id">
                   <option value="0"><?php echo $text_all_zones; ?></option>
                   <?php foreach ($geo_zones as $geo_zone) { ?>
-                  <?php if ($geo_zone['geo_zone_id'] == $op_alipayhk_geo_zone_id) { ?>
+                  <?php if ($geo_zone['geo_zone_id'] == $op_wechatpay_geo_zone_id) { ?>
                   <option value="<?php echo $geo_zone['geo_zone_id']; ?>" selected="selected"><?php echo $geo_zone['name']; ?></option>
                   <?php } else { ?>
                   <option value="<?php echo $geo_zone['geo_zone_id']; ?>"><?php echo $geo_zone['name']; ?></option>
@@ -134,8 +134,8 @@
             </tr>
             <tr>
               <td><?php echo $entry_code; ?></td>
-              <td><select name="op_alipayhk_code">
-                  <?php if ($op_alipayhk_code) { ?>
+              <td><select name="op_wechatpay_code">
+                  <?php if ($op_wechatpay_code) { ?>
                   <option value="1" selected="selected"><?php echo $text_code_online; ?></option>
                   <option value="0"><?php echo $text_code_local; ?></option>
                   <?php } else { ?>
@@ -146,8 +146,8 @@
             </tr>
             <tr>
               <td><?php echo $entry_status; ?></td>
-              <td><select name="op_alipayhk_status">
-                  <?php if ($op_alipayhk_status) { ?>
+              <td><select name="op_wechatpay_status">
+                  <?php if ($op_wechatpay_status) { ?>
                   <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
                   <option value="0"><?php echo $text_disabled; ?></option>
                   <?php } else { ?>
@@ -158,7 +158,7 @@
             </tr>
             <tr>
               <td><?php echo $entry_sort_order; ?></td>
-              <td><input type="text" name="op_alipayhk_sort_order" value="<?php echo $op_alipayhk_sort_order; ?>" size="1" /></td>
+              <td><input type="text" name="op_wechatpay_sort_order" value="<?php echo $op_wechatpay_sort_order; ?>" size="1" /></td>
             </tr>
           </table>
         </form>

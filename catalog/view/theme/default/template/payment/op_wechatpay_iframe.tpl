@@ -6,7 +6,7 @@
         <img src="catalog/view/theme/default/image/loading.gif"  />
     </div>
 </div>
-<form action="<?php echo str_replace('&', '&amp;', $action); ?>" method="post" id="checkout_alipayhk" name="checkout_alipayhk">
+<form action="<?php echo str_replace('&', '&amp;', $action); ?>" method="post" id="checkout_wechatpay" name="checkout_wechatpay">
   <input type="hidden" name="account" value="<?php echo $account; ?>" />
   <input type="hidden" name="terminal" value="<?php echo $terminal; ?>" />
   <input type="hidden" name="order_number" value="<?php echo $order_number; ?>" />
@@ -44,19 +44,19 @@
   <input type="hidden" name="ET_COUPONS" value="<?php echo $ET_COUPONS; ?>" />
 </form>
 
-<iframe width="100%" height="340" scrolling="auto" name="ifrm_alipayhk_checkout" id="ifrm_alipayhk_checkout" style="border:none; margin: 0 auto; overflow:hidden;"></iframe>
+<iframe width="100%" height="340" scrolling="auto" name="ifrm_wechatpay_checkout" id="ifrm_wechatpay_checkout" style="border:none; margin: 0 auto; overflow:hidden;"></iframe>
 
 <script type="text/javascript">
 <?php if($_SESSION['pages']=='0'){?>
 if (window.XMLHttpRequest) {
-document.checkout_alipayhk.target="ifrm_alipayhk_checkout";
+document.checkout_wechatpay.target="ifrm_wechatpay_checkout";
 }
 <?php }?>
-document.checkout_alipayhk.submit();
+document.checkout_wechatpay.submit();
 window.status = "<?php echo $action;?>";
 </script>
 <script type="text/javascript">
-    var ifrm_cc  = document.getElementById("ifrm_alipayhk_checkout");
+    var ifrm_cc  = document.getElementById("ifrm_wechatpay_checkout");
     var loading  = document.getElementById("loading");
     if (ifrm_cc.attachEvent){
         ifrm_cc.attachEvent("onload", function(){
