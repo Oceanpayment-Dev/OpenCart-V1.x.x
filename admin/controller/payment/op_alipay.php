@@ -25,15 +25,10 @@ class ControllerPaymentOPAlipay extends Controller {
 		$this->data['text_disabled'] = $this->language->get('text_disabled');
 		$this->data['text_all_zones'] = $this->language->get('text_all_zones');
 		$this->data['text_pay'] = $this->language->get('text_pay');
-		$this->data['text_test'] = $this->language->get('text_test');	
-		$this->data['text_pay_iframe'] = $this->language->get('text_pay_iframe');
-		$this->data['text_pay_redirect'] = $this->language->get('text_pay_redirect');
-		$this->data['text_pay_iframe'] = $this->language->get('text_pay_iframe');
+		$this->data['text_test'] = $this->language->get('text_test');
 		$this->data['text_select_currency'] = $this->language->get('text_select_currency');
 		$this->data['text_code_online'] = $this->language->get('text_code_online');
 		$this->data['text_code_local'] = $this->language->get('text_code_local');
-		$this->data['text_3d_on'] = $this->language->get('text_3d_on');
-		$this->data['text_3d_off'] = $this->language->get('text_3d_off');
 		$this->data['text_select_all'] = $this->language->get('text_select_all');
 		$this->data['text_unselect_all'] = $this->language->get('text_unselect_all');
 	
@@ -41,14 +36,7 @@ class ControllerPaymentOPAlipay extends Controller {
 		$this->data['entry_account'] = $this->language->get('entry_account');
 		$this->data['entry_terminal'] = $this->language->get('entry_terminal');
 		$this->data['entry_securecode'] = $this->language->get('entry_securecode');
-		$this->data['entry_3d'] = $this->language->get('entry_3d');
-		$this->data['entry_3d_terminal'] = $this->language->get('entry_3d_terminal');
-		$this->data['entry_3d_securecode'] = $this->language->get('entry_3d_securecode');
-		$this->data['entry_currencies'] = $this->language->get('entry_currencies');
-		$this->data['entry_currencies_value'] = $this->language->get('entry_currencies_value');
-		$this->data['entry_countries'] = $this->language->get('entry_countries');
 		$this->data['entry_transaction'] = $this->language->get('entry_transaction');
-		$this->data['entry_pay_mode'] = $this->language->get('entry_pay_mode');
 		
 		$this->data['entry_default_order_status'] = $this->language->get('entry_default_order_status');	
 		$this->data['entry_success_order_status']=$this->language->get('entry_success_order_status');
@@ -130,8 +118,7 @@ class ControllerPaymentOPAlipay extends Controller {
 		} else {
 			$this->data['op_alipay_securecode'] = $this->config->get('op_alipay_securecode');
 		}
-		
-		
+
 		
 		$this->data['callback'] = HTTP_CATALOG . 'index.php?route=payment/op_alipay/callback';
 
@@ -141,12 +128,7 @@ class ControllerPaymentOPAlipay extends Controller {
 		} else {
 			$this->data['op_alipay_transaction'] = $this->config->get('op_alipay_transaction');
 		}
-		
-		if (isset($this->request->post['op_alipay_pay_mode'])) {
-			$this->data['op_alipay_pay_mode'] = $this->request->post['op_alipay_pay_mode'];
-		} else {
-			$this->data['op_alipay_pay_mode'] = $this->config->get('op_alipay_pay_mode');
-		}
+
 		
 		if (isset($this->request->post['op_alipay_default_order_status_id'])) {
 			$this->data['op_alipay_default_order_status_id'] = $this->request->post['op_alipay_default_order_status_id'];

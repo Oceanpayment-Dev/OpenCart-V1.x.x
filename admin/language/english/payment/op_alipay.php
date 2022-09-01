@@ -8,8 +8,6 @@ $_['text_success']       	= 'Success: You have modified alipay account details!'
 $_['text_op_alipay'] 	= '<img src="view/image/payment/op_alipay.png" alt="alipay"  height="25"  title="alipay" style="border: 1px solid #EEEEEE;" />';
 $_['text_pay']           	= 'https://secure.oceanpayment.com/gateway/service/pay';
 $_['text_test']          	= 'https://test-secure.oceanpayment.com/gateway/service/pay';
-$_['text_pay_iframe']    	= 'Iframe';
-$_['text_pay_redirect']  	= 'Redirect';
 $_['text_code_online']    	= 'Online';
 $_['text_code_local'] 	 	= 'Local';
 $_['text_pay_iframe']    	= 'Iframe';
