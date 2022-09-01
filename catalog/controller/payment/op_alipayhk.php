@@ -303,23 +303,12 @@ class ControllerPaymentOPAlipayhk extends Controller {
 			
 			$this->id = 'payment';
 			
-			//支付模式Pay Mode
-			if($this->config->get('op_alipayhk_pay_mode') == 1){
-				//内嵌Iframe
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_alipayhk_iframe.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_alipayhk_iframe.tpl';
-				} else {
-					$this->template = 'default/template/payment/op_alipayhk_iframe.tpl';
-				}
-					
-			}else{
-				//跳转Redirect
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_alipayhk_form.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_alipayhk_form.tpl';
-				} else {
-					$this->template = 'default/template/payment/op_alipayhk_form.tpl';
-				}
-					
+
+			//跳转Redirect
+			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_alipayhk_form.tpl')) {
+				$this->template = $this->config->get('config_template') . '/template/payment/op_alipayhk_form.tpl';
+			} else {
+				$this->template = 'default/template/payment/op_alipayhk_form.tpl';
 			}
 			
 			$this->response->setOutput($this->render());
