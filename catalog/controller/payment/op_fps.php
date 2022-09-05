@@ -1,6 +1,6 @@
 <?php
 include_once(DIR_APPLICATION."controller/payment/Mobile_Detect.php");
-class ControllerPaymentOPWechatPay extends Controller {
+class ControllerPaymentOPFps extends Controller {
 	const PUSH 			= "[PUSH]";
 	const BrowserReturn = "[Browser Return]";
 	const Abnormal 		= "[Abnormal]";
@@ -9,7 +9,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 	{
 		$this->load->model('checkout/order');
 		
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_wechatpay_default_order_status_id'));
+		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_fps_default_order_status_id'));
 	}
 	
 	protected function index() {
@@ -32,22 +32,22 @@ class ControllerPaymentOPWechatPay extends Controller {
 		
 		$this->load->library('encryption');
 		$this->id = 'payment';
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay.tpl')) {
-			$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay.tpl';
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps.tpl')) {
+			$this->template = $this->config->get('config_template') . '/template/payment/op_fps.tpl';
 		} else {
-			$this->template = 'default/template/payment/op_wechatpay.tpl';
+			$this->template = 'default/template/payment/op_fps.tpl';
 		}	
 		
 		$this->render();
 	}
 	
-	public function op_wechatpay_form()
+	public function op_fps_form()
 	{
 		
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_iframe.tpl')) {
-			$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_iframe.tpl';
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl')) {
+			$this->template = $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl';
 		} else {
-			$this->template = 'default/template/payment/op_wechatpay_iframe.tpl';
+			$this->template = 'default/template/payment/op_fps_iframe.tpl';
 		}
 	
 		$this->children = array(
@@ -57,18 +57,18 @@ class ControllerPaymentOPWechatPay extends Controller {
 				'common/header'
 		);
 
-		$this->op_wechatpay();
+		$this->op_fps();
 	
 		$this->response->setOutput($this->render());
 
 	}
 	
 	
-	public function op_wechatpay() {
+	public function op_fps() {
 		$this->data['button_confirm'] = $this->language->get('button_confirm');
 		$this->data['button_back'] = $this->language->get('button_back');
 		$this->load->model('checkout/order');
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_wechatpay_default_order_status_id'));
+		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_fps_default_order_status_id'));
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
 		//判断是否为空订单
@@ -76,13 +76,13 @@ class ControllerPaymentOPWechatPay extends Controller {
 			
 			$this->load->library('encryption');
 			
-			$this->load->model('payment/op_wechatpay');
-			$product_info = $this->model_payment_op_wechatpay->getOrderProducts($this->session->data['order_id']);
+			$this->load->model('payment/op_fps');
+			$product_info = $this->model_payment_op_fps->getOrderProducts($this->session->data['order_id']);
 			
 			//获取订单详情
 			$productDetails = $this->getProductItems($product_info);
 			//获取消费者详情
-			$customer_info = $this->model_payment_op_wechatpay->getCustomerDetails($order_info['customer_id']);
+			$customer_info = $this->model_payment_op_fps->getCustomerDetails($order_info['customer_id']);
 			
 			if (!isset($this->request->server['HTTPS']) || ($this->request->server['HTTPS'] != 'on')) {
 				$base_url = $this->config->get('config_url');
@@ -93,11 +93,11 @@ class ControllerPaymentOPWechatPay extends Controller {
 			
 			
 			//提交网关
-			$action = $this->config->get('op_wechatpay_transaction');
+			$action = $this->config->get('op_fps_transaction');
 			$this->data['action'] = $action;
 			
 			//账户号
-			$account = $this->config->get('op_wechatpay_account');
+			$account = $this->config->get('op_fps_account');
 			$this->data['account'] = $account;
 
 			//订单号
@@ -113,18 +113,18 @@ class ControllerPaymentOPWechatPay extends Controller {
 			$this->data['order_currency'] = $order_currency;
 
 			//终端号
-			$terminal = $this->config->get('op_wechatpay_terminal');
+			$terminal = $this->config->get('op_fps_terminal');
 			$this->data['terminal'] = $terminal;
 			
 			//securecode
-			$securecode = $this->config->get('op_wechatpay_securecode');
+			$securecode = $this->config->get('op_fps_securecode');
 			
 			//返回地址
-			$backUrl = $base_url.'index.php?route=payment/op_wechatpay/callback';
+			$backUrl = $base_url.'index.php?route=payment/op_fps/callback';
 			$this->data['backUrl'] = $backUrl;
 			
 			//服务器响应地址
-			$noticeUrl = $base_url.'index.php?route=payment/op_wechatpay/notice';
+			$noticeUrl = $base_url.'index.php?route=payment/op_fps/notice';
 			$this->data['noticeUrl'] = $noticeUrl;
 			
 			//备注
@@ -132,7 +132,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 			$this->data['order_notes'] = $order_notes;
 			
 			//支付方式
-			$methods = $this->Source();
+			$methods = 'FPS';
 			$this->data['methods'] = $methods;
 			
 			//账单人名
@@ -302,25 +302,27 @@ class ControllerPaymentOPWechatPay extends Controller {
 			}
 			
 			$this->id = 'payment';
-			
+
 			//支付模式Pay Mode
-			if($this->config->get('op_wechatpay_pay_mode') == 1){
+			if($this->config->get('op_fps_pay_mode') == 1){
 				//内嵌Iframe
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_iframe.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_iframe.tpl';
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl')) {
+					$this->template = $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl';
 				} else {
-					$this->template = 'default/template/payment/op_wechatpay_iframe.tpl';
+					$this->template = 'default/template/payment/op_fps_iframe.tpl';
 				}
-					
+
 			}else{
 				//跳转Redirect
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_form.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_form.tpl';
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_form.tpl')) {
+					$this->template = $this->config->get('config_template') . '/template/payment/op_fps_form.tpl';
 				} else {
-					$this->template = 'default/template/payment/op_wechatpay_form.tpl';
+					$this->template = 'default/template/payment/op_fps_form.tpl';
 				}
-					
+
 			}
+
+
 			
 			$this->response->setOutput($this->render());
 			
@@ -335,7 +337,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 	
 	public function callback() {
 			if (isset($this->request->post['order_number']) && !(empty($this->request->post['order_number']))) {
-			$this->language->load('payment/op_wechatpay');
+			$this->language->load('payment/op_fps');
 		
 			$this->data['title'] = sprintf($this->language->get('heading_title'), $this->config->get('config_name'));
 
@@ -362,7 +364,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 			
 			
 			//返回信息
-			$account = $this->config->get('op_wechatpay_account');
+			$account = $this->config->get('op_fps_account');
 			$terminal = $this->request->post['terminal'];
 			$response_type = $this->request->post['response_type'];
 			$payment_id = $this->request->post['payment_id'];
@@ -378,7 +380,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 			$card_number = $this->request->post['card_number'];
 			$payment_authType = $this->request->post['payment_authType'];
 			$payment_risk = $this->request->post['payment_risk'];
-			$code_mode = $this->config->get('op_wechatpay_code');
+			$code_mode = $this->config->get('op_fps_code');
 			
 			
 			//用于支付结果页面显示响应代码
@@ -395,9 +397,9 @@ class ControllerPaymentOPWechatPay extends Controller {
 	
 			
 			//匹配终端号
-			if($terminal == $this->config->get('op_wechatpay_terminal')){
+			if($terminal == $this->config->get('op_fps_terminal')){
 				//普通终端号
-				$securecode = $this->config->get('op_wechatpay_securecode');
+				$securecode = $this->config->get('op_fps_securecode');
 			}else{
 				$securecode = '';
 			}
@@ -445,24 +447,24 @@ class ControllerPaymentOPWechatPay extends Controller {
 					//正常浏览器跳转
 					if(substr($payment_details,0,5) == 20061){	 
 						//排除订单号重复(20061)的交易	
-						if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl')) {
-							$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl';
+						if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
+							$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
 						} else {
-							$this->template = 'default/template/payment/op_wechatpay_failure.tpl';
+							$this->template = 'default/template/payment/op_fps_failure.tpl';
 						}
 						
 					}else{
 						if ($payment_status == 1 ){  
 							//交易成功
-							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_wechatpay_success_order_status_id'), $message, FALSE);
+							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_success_order_status_id'), $message, FALSE);
 							
 							unset($this->session->data['coupon']);
 							
 							$this->data['continue'] = HTTPS_SERVER . 'index.php?route=checkout/success';
-							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_success.tpl')) {
-								$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_success.tpl';
+							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_success.tpl')) {
+								$this->template = $this->config->get('config_template') . '/template/payment/op_fps_success.tpl';
 							} else {
-								$this->template = 'default/template/payment/op_wechatpay_success.tpl';
+								$this->template = 'default/template/payment/op_fps_success.tpl';
 							}
 								
 						}elseif ($payment_status == -1 ){   
@@ -472,22 +474,22 @@ class ControllerPaymentOPWechatPay extends Controller {
 								$message .= '(Pre-auth)';
 								unset($this->session->data['coupon']);
 							}
-							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_wechatpay_failed_order_status_id'),$message, FALSE);
+							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_failed_order_status_id'),$message, FALSE);
 							
-							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl')) {
-								$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl';
+							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
+								$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
 							} else {
-								$this->template = 'default/template/payment/op_wechatpay_failure.tpl';
+								$this->template = 'default/template/payment/op_fps_failure.tpl';
 							}
 								
 						}else{     
 							//交易失败
-							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_wechatpay_failed_order_status_id'),$message, FALSE);
+							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_failed_order_status_id'),$message, FALSE);
 							
-							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl')) {
-								$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl';
+							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
+								$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
 							} else {
-								$this->template = 'default/template/payment/op_wechatpay_failure.tpl';
+								$this->template = 'default/template/payment/op_fps_failure.tpl';
 							}
 								
 						}
@@ -496,12 +498,12 @@ class ControllerPaymentOPWechatPay extends Controller {
 			
 			}else {     
 				//数据签名对比失败
-				$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_wechatpay_failed_order_status_id'),$message, FALSE);
+				$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_failed_order_status_id'),$message, FALSE);
 				
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_wechatpay_failure.tpl';
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
+					$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
 				} else {
-					$this->template = 'default/template/payment/op_wechatpay_failure.tpl';
+					$this->template = 'default/template/payment/op_fps_failure.tpl';
 				}
 			}
 		}
@@ -550,9 +552,9 @@ class ControllerPaymentOPWechatPay extends Controller {
 		
 				
 			//匹配终端号
-			if($_REQUEST['terminal'] == $this->config->get('op_wechatpay_terminal')){
+			if($_REQUEST['terminal'] == $this->config->get('op_fps_terminal')){
 				//普通终端号
-				$securecode = $this->config->get('op_wechatpay_securecode');
+				$securecode = $this->config->get('op_fps_securecode');
 			}else{
 				$securecode = '';
 			}
@@ -599,17 +601,17 @@ class ControllerPaymentOPWechatPay extends Controller {
 				}else{
 					if ($_REQUEST['payment_status'] == 1 ){
 						//交易成功
-						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_wechatpay_success_order_status_id'), $message, false);
+						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_fps_success_order_status_id'), $message, false);
 					}elseif ($_REQUEST['payment_status'] == -1){
 						//交易待处理
 						//是否预授权交易
 						if($_REQUEST['payment_authType'] == 1){
 							$message .= '(Pre-auth)';
 						}
-						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_wechatpay_pending_order_status_id'), $message, false);
+						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_fps_pending_order_status_id'), $message, false);
 					}else{
 						//交易失败
-						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_wechatpay_failed_order_status_id'), $message, false);
+						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_fps_failed_order_status_id'), $message, false);
 					}
 				}	
 			}
@@ -724,60 +726,6 @@ class ControllerPaymentOPWechatPay extends Controller {
 	
 	}
 
-	/**
-	 * 检验是否移动端
-	 */
-	function isMobile(){
-		// 如果有HTTP_X_WAP_PROFILE则一定是移动设备
-		if (isset ($_SERVER['HTTP_X_WAP_PROFILE'])){
-			return true;
-		}
-		// 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
-		if (isset ($_SERVER['HTTP_VIA'])){
-			// 找不到为flase,否则为true
-			return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
-		}
-		// 判断手机发送的客户端标志
-		if (isset ($_SERVER['HTTP_USER_AGENT'])){
-			$clientkeywords = array (
-				'nokia','sony','ericsson','mot','samsung','htc','sgh','lg','sharp','sie-','philips','panasonic','alcatel',
-				'lenovo','iphone','ipod','blackberry','meizu','android','netfront','symbian','ucweb','windowsce','palm',
-				'operamini','operamobi','openwave','nexusone','cldc','midp','wap','mobile'
-			);
-			// 从HTTP_USER_AGENT中查找手机浏览器的关键字
-			if (preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT']))){
-				return true;
-			}
-		}
-		// 判断协议
-		if (isset ($_SERVER['HTTP_ACCEPT'])){
-			// 如果只支持wml并且不支持html那一定是移动设备
-			// 如果支持wml和html但是wml在html之前则是移动设备
-			if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * 判断终端来源
-	 */
-	function Source(){
-		//是否移动端
-		if($this->isMobile()){
-			if(strpos($_SERVER['HTTP_USER_AGENT'],'MicroMessenger') !== false){
-				//公众号
-				return 'WeChatPay_Acc';
-			}else{
-				//H5
-				return 'WeChatPay_Wap';
-			}
-		}else{
-			//pc
-			return 'WeChatPay_Web';
-		}
-	}
 	
 	/**
 	 * Abnormal log
@@ -870,7 +818,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 	 */
 	public function getLocalMessage($ErrorCode)
 	{
-		$this->language->load('payment/op_wechatpay');
+		$this->language->load('payment/op_fps');
 		
 		$CodeAction = array(
 				'80010' => $this->language->get('text_actionMsg_1'),

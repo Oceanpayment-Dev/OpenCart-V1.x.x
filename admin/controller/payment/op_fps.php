@@ -1,9 +1,9 @@
 <?php 
-class ControllerPaymentOPWechatPay extends Controller {
+class ControllerPaymentOPFps extends Controller {
 	private $error = array(); 
 
 	public function index() {
-		$this->load->language('payment/op_wechatpay');
+		$this->load->language('payment/op_fps');
 		
 		$this->document->setTitle($this->language->get('heading_title'));
 		
@@ -12,7 +12,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
 			$this->load->model('setting/setting');
 			
-			$this->model_setting_setting->editSetting('op_wechatpay', $this->request->post);
+			$this->model_setting_setting->editSetting('op_fps', $this->request->post);
 			
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -25,15 +25,12 @@ class ControllerPaymentOPWechatPay extends Controller {
 		$this->data['text_disabled'] = $this->language->get('text_disabled');
 		$this->data['text_all_zones'] = $this->language->get('text_all_zones');
 		$this->data['text_pay'] = $this->language->get('text_pay');
-		$this->data['text_test'] = $this->language->get('text_test');	
-		$this->data['text_pay_iframe'] = $this->language->get('text_pay_iframe');
+		$this->data['text_test'] = $this->language->get('text_test');
 		$this->data['text_pay_redirect'] = $this->language->get('text_pay_redirect');
 		$this->data['text_pay_iframe'] = $this->language->get('text_pay_iframe');
 		$this->data['text_select_currency'] = $this->language->get('text_select_currency');
 		$this->data['text_code_online'] = $this->language->get('text_code_online');
 		$this->data['text_code_local'] = $this->language->get('text_code_local');
-		$this->data['text_3d_on'] = $this->language->get('text_3d_on');
-		$this->data['text_3d_off'] = $this->language->get('text_3d_off');
 		$this->data['text_select_all'] = $this->language->get('text_select_all');
 		$this->data['text_unselect_all'] = $this->language->get('text_unselect_all');
 	
@@ -41,12 +38,6 @@ class ControllerPaymentOPWechatPay extends Controller {
 		$this->data['entry_account'] = $this->language->get('entry_account');
 		$this->data['entry_terminal'] = $this->language->get('entry_terminal');
 		$this->data['entry_securecode'] = $this->language->get('entry_securecode');
-		$this->data['entry_3d'] = $this->language->get('entry_3d');
-		$this->data['entry_3d_terminal'] = $this->language->get('entry_3d_terminal');
-		$this->data['entry_3d_securecode'] = $this->language->get('entry_3d_securecode');
-		$this->data['entry_currencies'] = $this->language->get('entry_currencies');
-		$this->data['entry_currencies_value'] = $this->language->get('entry_currencies_value');
-		$this->data['entry_countries'] = $this->language->get('entry_countries');
 		$this->data['entry_transaction'] = $this->language->get('entry_transaction');
 		$this->data['entry_pay_mode'] = $this->language->get('entry_pay_mode');
 		
@@ -104,70 +95,70 @@ class ControllerPaymentOPWechatPay extends Controller {
    		);
 
    		$this->data['breadcrumbs'][] = array(
-       		'href'      => HTTPS_SERVER . 'index.php?route=payment/op_wechatpay&token='. $this->session->data['token'],
+       		'href'      => HTTPS_SERVER . 'index.php?route=payment/op_fps&token='. $this->session->data['token'],
        		'text'      => $this->language->get('heading_title'),
       		'separator' => ' :: '
    		);
 				
-		$this->data['action'] = HTTPS_SERVER . 'index.php?route=payment/op_wechatpay&token='. $this->session->data['token'];
+		$this->data['action'] = HTTPS_SERVER . 'index.php?route=payment/op_fps&token='. $this->session->data['token'];
 		
 		$this->data['cancel'] = HTTPS_SERVER . 'index.php?route=extension/payment&token='. $this->session->data['token'];
 		
-		if (isset($this->request->post['op_wechatpay_account'])) {
-			$this->data['op_wechatpay_account'] = $this->request->post['op_wechatpay_account'];
+		if (isset($this->request->post['op_fps_account'])) {
+			$this->data['op_fps_account'] = $this->request->post['op_fps_account'];
 		} else {
-			$this->data['op_wechatpay_account'] = $this->config->get('op_wechatpay_account');
+			$this->data['op_fps_account'] = $this->config->get('op_fps_account');
 		}
 		
-		if (isset($this->request->post['op_wechatpay_terminal'])) {
-			$this->data['op_wechatpay_terminal'] = $this->request->post['op_wechatpay_terminal'];
+		if (isset($this->request->post['op_fps_terminal'])) {
+			$this->data['op_fps_terminal'] = $this->request->post['op_fps_terminal'];
 		} else {
-			$this->data['op_wechatpay_terminal'] = $this->config->get('op_wechatpay_terminal');
+			$this->data['op_fps_terminal'] = $this->config->get('op_fps_terminal');
 		}
 		
-		if (isset($this->request->post['op_wechatpay_securecode'])) {
-			$this->data['op_wechatpay_securecode'] = $this->request->post['op_wechatpay_securecode'];
+		if (isset($this->request->post['op_fps_securecode'])) {
+			$this->data['op_fps_securecode'] = $this->request->post['op_fps_securecode'];
 		} else {
-			$this->data['op_wechatpay_securecode'] = $this->config->get('op_wechatpay_securecode');
+			$this->data['op_fps_securecode'] = $this->config->get('op_fps_securecode');
 		}
-		
-		
-		
-		$this->data['callback'] = HTTP_CATALOG . 'index.php?route=payment/op_wechatpay/callback';
 
 		
-		if (isset($this->request->post['op_wechatpay_transaction'])) {
-			$this->data['op_wechatpay_transaction'] = $this->request->post['op_wechatpay_transaction'];
+		$this->data['callback'] = HTTP_CATALOG . 'index.php?route=payment/op_fps/callback';
+
+		
+		if (isset($this->request->post['op_fps_transaction'])) {
+			$this->data['op_fps_transaction'] = $this->request->post['op_fps_transaction'];
 		} else {
-			$this->data['op_wechatpay_transaction'] = $this->config->get('op_wechatpay_transaction');
+			$this->data['op_fps_transaction'] = $this->config->get('op_fps_transaction');
+		}
+
+
+		if (isset($this->request->post['op_fps_pay_mode'])) {
+			$this->data['op_fps_pay_mode'] = $this->request->post['op_fps_pay_mode'];
+		} else {
+			$this->data['op_fps_pay_mode'] = $this->config->get('op_fps_pay_mode');
 		}
 		
-		if (isset($this->request->post['op_wechatpay_pay_mode'])) {
-			$this->data['op_wechatpay_pay_mode'] = $this->request->post['op_wechatpay_pay_mode'];
+		if (isset($this->request->post['op_fps_default_order_status_id'])) {
+			$this->data['op_fps_default_order_status_id'] = $this->request->post['op_fps_default_order_status_id'];
 		} else {
-			$this->data['op_wechatpay_pay_mode'] = $this->config->get('op_wechatpay_pay_mode');
-		}
-		
-		if (isset($this->request->post['op_wechatpay_default_order_status_id'])) {
-			$this->data['op_wechatpay_default_order_status_id'] = $this->request->post['op_wechatpay_default_order_status_id'];
-		} else {
-			$this->data['op_wechatpay_default_order_status_id'] = $this->config->get('op_wechatpay_default_order_status_id');
+			$this->data['op_fps_default_order_status_id'] = $this->config->get('op_fps_default_order_status_id');
 		} 
 		/* add status */
-		if (isset($this->request->post['op_wechatpay_success_order_status_id'])) {
-			$this->data['op_wechatpay_success_order_status_id'] = $this->request->post['op_wechatpay_success_order_status_id'];
+		if (isset($this->request->post['op_fps_success_order_status_id'])) {
+			$this->data['op_fps_success_order_status_id'] = $this->request->post['op_fps_success_order_status_id'];
 		} else {
-			$this->data['op_wechatpay_success_order_status_id'] = $this->config->get('op_wechatpay_success_order_status_id');
+			$this->data['op_fps_success_order_status_id'] = $this->config->get('op_fps_success_order_status_id');
 		} 
-		if (isset($this->request->post['op_wechatpay_failed_order_status_id'])) {
-			$this->data['op_wechatpay_failed_order_status_id'] = $this->request->post['op_wechatpay_failed_order_status_id'];
+		if (isset($this->request->post['op_fps_failed_order_status_id'])) {
+			$this->data['op_fps_failed_order_status_id'] = $this->request->post['op_fps_failed_order_status_id'];
 		} else {
-			$this->data['op_wechatpay_failed_order_status_id'] = $this->config->get('op_wechatpay_failed_order_status_id');
+			$this->data['op_fps_failed_order_status_id'] = $this->config->get('op_fps_failed_order_status_id');
 		} 
-		if (isset($this->request->post['op_wechatpay_pending_order_status_id'])) {
-			$this->data['op_wechatpay_pending_order_status_id'] = $this->request->post['op_wechatpay_pending_order_status_id'];
+		if (isset($this->request->post['op_fps_pending_order_status_id'])) {
+			$this->data['op_fps_pending_order_status_id'] = $this->request->post['op_fps_pending_order_status_id'];
 		} else {
-			$this->data['op_wechatpay_pending_order_status_id'] = $this->config->get('op_wechatpay_pending_order_status_id');
+			$this->data['op_fps_pending_order_status_id'] = $this->config->get('op_fps_pending_order_status_id');
 		}
 		
 		
@@ -175,35 +166,35 @@ class ControllerPaymentOPWechatPay extends Controller {
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
-		if (isset($this->request->post['op_wechatpay_geo_zone_id'])) {
-			$this->data['op_wechatpay_geo_zone_id'] = $this->request->post['op_wechatpay_geo_zone_id'];
+		if (isset($this->request->post['op_fps_geo_zone_id'])) {
+			$this->data['op_fps_geo_zone_id'] = $this->request->post['op_fps_geo_zone_id'];
 		} else {
-			$this->data['op_wechatpay_geo_zone_id'] = $this->config->get('op_wechatpay_geo_zone_id');
+			$this->data['op_fps_geo_zone_id'] = $this->config->get('op_fps_geo_zone_id');
 		} 
 
 		$this->load->model('localisation/geo_zone');
 										
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
-		if (isset($this->request->post['op_wechatpay_code'])) {
-			$this->data['op_wechatpay_code'] = $this->request->post['op_wechatpay_code'];
+		if (isset($this->request->post['op_fps_code'])) {
+			$this->data['op_fps_code'] = $this->request->post['op_fps_code'];
 		} else {
-			$this->data['op_wechatpay_code'] = $this->config->get('op_wechatpay_code');
+			$this->data['op_fps_code'] = $this->config->get('op_fps_code');
 		}
 
-		if (isset($this->request->post['op_wechatpay_status'])) {
-			$this->data['op_wechatpay_status'] = $this->request->post['op_wechatpay_status'];
+		if (isset($this->request->post['op_fps_status'])) {
+			$this->data['op_fps_status'] = $this->request->post['op_fps_status'];
 		} else {
-			$this->data['op_wechatpay_status'] = $this->config->get('op_wechatpay_status');
+			$this->data['op_fps_status'] = $this->config->get('op_fps_status');
 		}
 		
-		if (isset($this->request->post['op_wechatpay_sort_order'])) {
-			$this->data['op_wechatpay_sort_order'] = $this->request->post['op_wechatpay_sort_order'];
+		if (isset($this->request->post['op_fps_sort_order'])) {
+			$this->data['op_fps_sort_order'] = $this->request->post['op_fps_sort_order'];
 		} else {
-			$this->data['op_wechatpay_sort_order'] = $this->config->get('op_wechatpay_sort_order');
+			$this->data['op_fps_sort_order'] = $this->config->get('op_fps_sort_order');
 		}
 		
-		$this->template = 'payment/op_wechatpay.tpl';
+		$this->template = 'payment/op_fps.tpl';
 		$this->children = array(
 			'common/header',	
 			'common/footer'	
@@ -213,19 +204,19 @@ class ControllerPaymentOPWechatPay extends Controller {
 	}
 
 	private function validate() {
-		if (!$this->user->hasPermission('modify', 'payment/op_wechatpay')) {
+		if (!$this->user->hasPermission('modify', 'payment/op_fps')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 		
-		if (!$this->request->post['op_wechatpay_account']) {
+		if (!$this->request->post['op_fps_account']) {
 			$this->error['account'] = $this->language->get('error_account');
 		}
 
-		if (!$this->request->post['op_wechatpay_terminal']) {
+		if (!$this->request->post['op_fps_terminal']) {
 			$this->error['terminal'] = $this->language->get('error_terminal');
 		}		
 		
-		if (!$this->request->post['op_wechatpay_securecode']) {
+		if (!$this->request->post['op_fps_securecode']) {
 			$this->error['securecode'] = $this->language->get('error_securecode');
 		}
 		

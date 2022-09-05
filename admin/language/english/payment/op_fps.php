@@ -1,15 +1,13 @@
 <?php
 // Heading
-$_['heading_title']      = 'Oceanpayment WeChat Pay Payment';
+$_['heading_title']      = 'Oceanpayment FPS Payment';
 
 // Text 
 $_['text_payment']      	 = 'Payment';
-$_['text_success']       	= 'Success: You have modified wechatpay account details!';
-$_['text_op_wechatpay'] 	= '<img src="view/image/payment/op_wechatpay.png" alt="wechatpay"  height="25"  title="wechatpay" style="border: 1px solid #EEEEEE;" />';
+$_['text_success']       	= 'Success: You have modified fps account details!';
+$_['text_op_fps'] 	= '<img src="view/image/payment/op_fps.jpg" alt="fps"  height="25"  title="fps" style="border: 1px solid #EEEEEE;" />';
 $_['text_pay']           	= 'https://secure.oceanpayment.com/gateway/service/pay';
 $_['text_test']          	= 'https://test-secure.oceanpayment.com/gateway/service/pay';
-$_['text_pay_iframe']    	= 'Iframe';
-$_['text_pay_redirect']  	= 'Redirect';
 $_['text_code_online']    	= 'Online';
 $_['text_code_local'] 	 	= 'Local';
 $_['text_pay_iframe']    	= 'Iframe';
@@ -20,6 +18,7 @@ $_['text_select_currency']  = '- Select -';
 $_['entry_account']                   = 'Account:';
 $_['entry_terminal']                  = 'Terminal:';
 $_['entry_securecode']                = 'Securecode:';
+
 $_['entry_transaction']               = 'Oceanpayment transaction URL:';
 $_['entry_pay_mode']				  = 'Pay Mode:';
 $_['entry_default_order_status']      = 'Default Order Status:';
@@ -32,7 +31,7 @@ $_['entry_code']     				  = 'Response Code Mode:';
 $_['entry_sort_order']                = 'Sort Order:';
 
 // Error
-$_['error_permission']                = 'Warning: You do not have permission to modify Oceanpayment WeChat Pay!';
+$_['error_permission']                = 'Warning: You do not have permission to modify Oceanpayment FPS!';
 $_['error_account']                   = 'Account Required!';
 $_['error_terminal']                  = 'Terminal Required!';
 $_['error_securecode']                = 'Securecode Required!';

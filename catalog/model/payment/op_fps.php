@@ -1,14 +1,14 @@
 <?php 
-class ModelPaymentOPWechatPay extends Model {
+class ModelPaymentOPFps extends Model {
 	private $_limit = ',';
 	
   	public function getMethod($address) {
-		$this->load->language('payment/op_wechatpay');
+		$this->load->language('payment/op_fps');
 		
-		if ($this->config->get('op_wechatpay_status')) {
-      		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('op_wechatpay_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		if ($this->config->get('op_fps_status')) {
+      		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('op_fps_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 			
-			if (!$this->config->get('op_wechatpay_geo_zone_id')) {
+			if (!$this->config->get('op_fps_geo_zone_id')) {
         		$status = TRUE;
       		} elseif ($query->num_rows) {
       		  	$status = TRUE;
@@ -23,9 +23,9 @@ class ModelPaymentOPWechatPay extends Model {
 	
 		if ($status) {  
       		$method_data = array( 
-        		'code'         => 'op_wechatpay',
+        		'code'         => 'op_fps',
         		'title'      => $this->language->get('text_title'),
-				'sort_order' => $this->config->get('op_wechatpay_sort_order')
+				'sort_order' => $this->config->get('op_fps_sort_order')
       		);
     	}
    
