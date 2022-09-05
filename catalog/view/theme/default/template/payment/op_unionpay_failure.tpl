@@ -6,7 +6,7 @@
 <base href="<?php echo $base; ?>" />
 <script>
 function goto(){
-    window.parent.location.href="<?php echo $text_success_url; ?>";
+    window.parent.location.href="<?php echo $text_failure_url; ?>";
 }
 function auto(){
     setTimeout("goto()",5000);
@@ -18,12 +18,12 @@ function auto(){
   <h1><?php echo $heading_title; ?></h1>
   <p><?php echo $text_response; ?></p>
   <div style="border: 1px solid #DDDDDD; margin-bottom: 20px; width: 350px; margin-left: auto; margin-right: auto;">
-    <fps ITEM=banner>
+    <unionpay ITEM=banner>
   </div>
-  <p><?php echo $text_success; ?></p>
-  <p><?php echo 'Your Order No. is:'.$text_order_number; ?></p>
-  <p><?php echo $text_success_wait; ?></p>
-
+  <p><?php echo $text_failure; ?></p>
+  <p><?php echo $payment_details; ?></p>
+  <p><?php echo $actionMsg; ?></p>
+  <p><?php echo $text_failure_wait; ?></p>
 </div>
 </body>
 </html>

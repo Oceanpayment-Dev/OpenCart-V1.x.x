@@ -1,14 +1,14 @@
 <?php 
-class ModelPaymentOPFps extends Model {
+class ModelPaymentOPUnionpay extends Model {
 	private $_limit = ',';
 	
   	public function getMethod($address) {
-		$this->load->language('payment/op_fps');
+		$this->load->language('payment/op_unionpay');
 		
-		if ($this->config->get('op_fps_status')) {
-      		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('op_fps_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		if ($this->config->get('op_unionpay_status')) {
+      		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('op_unionpay_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 			
-			if (!$this->config->get('op_fps_geo_zone_id')) {
+			if (!$this->config->get('op_unionpay_geo_zone_id')) {
         		$status = TRUE;
       		} elseif ($query->num_rows) {
       		  	$status = TRUE;
@@ -23,9 +23,9 @@ class ModelPaymentOPFps extends Model {
 	
 		if ($status) {  
       		$method_data = array( 
-        		'code'         => 'op_fps',
+        		'code'         => 'op_unionpay',
         		'title'      => $this->language->get('text_title'),
-				'sort_order' => $this->config->get('op_fps_sort_order')
+				'sort_order' => $this->config->get('op_unionpay_sort_order')
       		);
     	}
    

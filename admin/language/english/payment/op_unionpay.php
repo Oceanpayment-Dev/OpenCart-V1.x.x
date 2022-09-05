@@ -1,11 +1,11 @@
 <?php
 // Heading
-$_['heading_title']      = 'Oceanpayment FPS Payment';
+$_['heading_title']      = 'Oceanpayment UnionPay Payment';
 
 // Text 
 $_['text_payment']      	 = 'Payment';
-$_['text_success']       	= 'Success: You have modified fps account details!';
-$_['text_op_fps'] 	= '<img src="view/image/payment/op_fps.jpg" alt="fps"  height="25"  title="fps" style="border: 1px solid #EEEEEE;" />';
+$_['text_success']       	= 'Success: You have modified unionpay account details!';
+$_['text_op_unionpay'] 	= '<img src="view/image/payment/op_unionpay.jpg" alt="unionpay"  height="25"  title="unionpay" style="border: 1px solid #EEEEEE;" />';
 $_['text_pay']           	= 'https://secure.oceanpayment.com/gateway/service/pay';
 $_['text_test']          	= 'https://test-secure.oceanpayment.com/gateway/service/pay';
 $_['text_code_online']    	= 'Online';
@@ -31,7 +31,7 @@ $_['entry_code']     				  = 'Response Code Mode:';
 $_['entry_sort_order']                = 'Sort Order:';
 
 // Error
-$_['error_permission']                = 'Warning: You do not have permission to modify Oceanpayment FPS!';
+$_['error_permission']                = 'Warning: You do not have permission to modify Oceanpayment UnionPay!';
 $_['error_account']                   = 'Account Required!';
 $_['error_terminal']                  = 'Terminal Required!';
 $_['error_securecode']                = 'Securecode Required!';

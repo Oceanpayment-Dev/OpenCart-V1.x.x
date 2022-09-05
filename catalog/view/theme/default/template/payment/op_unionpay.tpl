@@ -7,14 +7,14 @@
 	$("#button-confirm").bind("click",function(){
 		$.ajax({
 			type: "GET",
-			url: "index.php?route=payment/op_fps/confirm",
+			url: "index.php?route=payment/op_unionpay/confirm",
 			beforeSend: function() {
 			$('#button-confirm').attr('disabled', true);
 			$('#button-confirm').after('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
 		        },
 			success: function()
 			{
-			location = 'index.php?route=payment/op_fps/op_fps_form';
+			location = 'index.php?route=payment/op_unionpay/op_unionpay_form';
 			}
 		});
 	});

@@ -1,6 +1,6 @@
 <?php
 include_once(DIR_APPLICATION."controller/payment/Mobile_Detect.php");
-class ControllerPaymentOPFps extends Controller {
+class ControllerPaymentOPUnionpay extends Controller {
 	const PUSH 			= "[PUSH]";
 	const BrowserReturn = "[Browser Return]";
 	const Abnormal 		= "[Abnormal]";
@@ -9,7 +9,7 @@ class ControllerPaymentOPFps extends Controller {
 	{
 		$this->load->model('checkout/order');
 		
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_fps_default_order_status_id'));
+		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_unionpay_default_order_status_id'));
 	}
 	
 	protected function index() {
@@ -32,22 +32,22 @@ class ControllerPaymentOPFps extends Controller {
 		
 		$this->load->library('encryption');
 		$this->id = 'payment';
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps.tpl')) {
-			$this->template = $this->config->get('config_template') . '/template/payment/op_fps.tpl';
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay.tpl')) {
+			$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay.tpl';
 		} else {
-			$this->template = 'default/template/payment/op_fps.tpl';
+			$this->template = 'default/template/payment/op_unionpay.tpl';
 		}	
 		
 		$this->render();
 	}
 	
-	public function op_fps_form()
+	public function op_unionpay_form()
 	{
 		
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl')) {
-			$this->template = $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl';
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_iframe.tpl')) {
+			$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_iframe.tpl';
 		} else {
-			$this->template = 'default/template/payment/op_fps_iframe.tpl';
+			$this->template = 'default/template/payment/op_unionpay_iframe.tpl';
 		}
 	
 		$this->children = array(
@@ -57,18 +57,18 @@ class ControllerPaymentOPFps extends Controller {
 				'common/header'
 		);
 
-		$this->op_fps();
+		$this->op_unionpay();
 	
 		$this->response->setOutput($this->render());
 
 	}
 	
 	
-	public function op_fps() {
+	public function op_unionpay() {
 		$this->data['button_confirm'] = $this->language->get('button_confirm');
 		$this->data['button_back'] = $this->language->get('button_back');
 		$this->load->model('checkout/order');
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_fps_default_order_status_id'));
+		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('op_unionpay_default_order_status_id'));
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
 		//判断是否为空订单
@@ -76,13 +76,13 @@ class ControllerPaymentOPFps extends Controller {
 			
 			$this->load->library('encryption');
 			
-			$this->load->model('payment/op_fps');
-			$product_info = $this->model_payment_op_fps->getOrderProducts($this->session->data['order_id']);
+			$this->load->model('payment/op_unionpay');
+			$product_info = $this->model_payment_op_unionpay->getOrderProducts($this->session->data['order_id']);
 			
 			//获取订单详情
 			$productDetails = $this->getProductItems($product_info);
 			//获取消费者详情
-			$customer_info = $this->model_payment_op_fps->getCustomerDetails($order_info['customer_id']);
+			$customer_info = $this->model_payment_op_unionpay->getCustomerDetails($order_info['customer_id']);
 			
 			if (!isset($this->request->server['HTTPS']) || ($this->request->server['HTTPS'] != 'on')) {
 				$base_url = $this->config->get('config_url');
@@ -93,11 +93,11 @@ class ControllerPaymentOPFps extends Controller {
 			
 			
 			//提交网关
-			$action = $this->config->get('op_fps_transaction');
+			$action = $this->config->get('op_unionpay_transaction');
 			$this->data['action'] = $action;
 			
 			//账户号
-			$account = $this->config->get('op_fps_account');
+			$account = $this->config->get('op_unionpay_account');
 			$this->data['account'] = $account;
 
 			//订单号
@@ -113,18 +113,18 @@ class ControllerPaymentOPFps extends Controller {
 			$this->data['order_currency'] = $order_currency;
 
 			//终端号
-			$terminal = $this->config->get('op_fps_terminal');
+			$terminal = $this->config->get('op_unionpay_terminal');
 			$this->data['terminal'] = $terminal;
 			
 			//securecode
-			$securecode = $this->config->get('op_fps_securecode');
+			$securecode = $this->config->get('op_unionpay_securecode');
 			
 			//返回地址
-			$backUrl = $base_url.'index.php?route=payment/op_fps/callback';
+			$backUrl = $base_url.'index.php?route=payment/op_unionpay/callback';
 			$this->data['backUrl'] = $backUrl;
 			
 			//服务器响应地址
-			$noticeUrl = $base_url.'index.php?route=payment/op_fps/notice';
+			$noticeUrl = $base_url.'index.php?route=payment/op_unionpay/notice';
 			$this->data['noticeUrl'] = $noticeUrl;
 			
 			//备注
@@ -132,7 +132,7 @@ class ControllerPaymentOPFps extends Controller {
 			$this->data['order_notes'] = $order_notes;
 			
 			//支付方式
-			$methods = 'FPS';
+			$methods = 'UnionPay';
 			$this->data['methods'] = $methods;
 			
 			//账单人名
@@ -303,25 +303,12 @@ class ControllerPaymentOPFps extends Controller {
 			
 			$this->id = 'payment';
 
-			//支付模式Pay Mode
-			if($this->config->get('op_fps_pay_mode') == 1){
-				//内嵌Iframe
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_fps_iframe.tpl';
-				} else {
-					$this->template = 'default/template/payment/op_fps_iframe.tpl';
-				}
-
-			}else{
-				//跳转Redirect
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_form.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_fps_form.tpl';
-				} else {
-					$this->template = 'default/template/payment/op_fps_form.tpl';
-				}
-
+			//跳转Redirect
+			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_form.tpl')) {
+				$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_form.tpl';
+			} else {
+				$this->template = 'default/template/payment/op_unionpay_form.tpl';
 			}
-
 
 			
 			$this->response->setOutput($this->render());
@@ -337,7 +324,7 @@ class ControllerPaymentOPFps extends Controller {
 	
 	public function callback() {
 			if (isset($this->request->post['order_number']) && !(empty($this->request->post['order_number']))) {
-			$this->language->load('payment/op_fps');
+			$this->language->load('payment/op_unionpay');
 		
 			$this->data['title'] = sprintf($this->language->get('heading_title'), $this->config->get('config_name'));
 
@@ -364,7 +351,7 @@ class ControllerPaymentOPFps extends Controller {
 			
 			
 			//返回信息
-			$account = $this->config->get('op_fps_account');
+			$account = $this->config->get('op_unionpay_account');
 			$terminal = $this->request->post['terminal'];
 			$response_type = $this->request->post['response_type'];
 			$payment_id = $this->request->post['payment_id'];
@@ -380,7 +367,7 @@ class ControllerPaymentOPFps extends Controller {
 			$card_number = $this->request->post['card_number'];
 			$payment_authType = $this->request->post['payment_authType'];
 			$payment_risk = $this->request->post['payment_risk'];
-			$code_mode = $this->config->get('op_fps_code');
+			$code_mode = $this->config->get('op_unionpay_code');
 			
 			
 			//用于支付结果页面显示响应代码
@@ -397,9 +384,9 @@ class ControllerPaymentOPFps extends Controller {
 	
 			
 			//匹配终端号
-			if($terminal == $this->config->get('op_fps_terminal')){
+			if($terminal == $this->config->get('op_unionpay_terminal')){
 				//普通终端号
-				$securecode = $this->config->get('op_fps_securecode');
+				$securecode = $this->config->get('op_unionpay_securecode');
 			}else{
 				$securecode = '';
 			}
@@ -447,24 +434,24 @@ class ControllerPaymentOPFps extends Controller {
 					//正常浏览器跳转
 					if(substr($payment_details,0,5) == 20061){	 
 						//排除订单号重复(20061)的交易	
-						if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
-							$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
+						if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl')) {
+							$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl';
 						} else {
-							$this->template = 'default/template/payment/op_fps_failure.tpl';
+							$this->template = 'default/template/payment/op_unionpay_failure.tpl';
 						}
 						
 					}else{
 						if ($payment_status == 1 ){  
 							//交易成功
-							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_success_order_status_id'), $message, FALSE);
+							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_unionpay_success_order_status_id'), $message, FALSE);
 							
 							unset($this->session->data['coupon']);
 							
 							$this->data['continue'] = HTTPS_SERVER . 'index.php?route=checkout/success';
-							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_success.tpl')) {
-								$this->template = $this->config->get('config_template') . '/template/payment/op_fps_success.tpl';
+							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_success.tpl')) {
+								$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_success.tpl';
 							} else {
-								$this->template = 'default/template/payment/op_fps_success.tpl';
+								$this->template = 'default/template/payment/op_unionpay_success.tpl';
 							}
 								
 						}elseif ($payment_status == -1 ){   
@@ -474,22 +461,22 @@ class ControllerPaymentOPFps extends Controller {
 								$message .= '(Pre-auth)';
 								unset($this->session->data['coupon']);
 							}
-							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_failed_order_status_id'),$message, FALSE);
+							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_unionpay_failed_order_status_id'),$message, FALSE);
 							
-							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
-								$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
+							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl')) {
+								$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl';
 							} else {
-								$this->template = 'default/template/payment/op_fps_failure.tpl';
+								$this->template = 'default/template/payment/op_unionpay_failure.tpl';
 							}
 								
 						}else{     
 							//交易失败
-							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_failed_order_status_id'),$message, FALSE);
+							$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_unionpay_failed_order_status_id'),$message, FALSE);
 							
-							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
-								$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
+							if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl')) {
+								$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl';
 							} else {
-								$this->template = 'default/template/payment/op_fps_failure.tpl';
+								$this->template = 'default/template/payment/op_unionpay_failure.tpl';
 							}
 								
 						}
@@ -498,12 +485,12 @@ class ControllerPaymentOPFps extends Controller {
 			
 			}else {     
 				//数据签名对比失败
-				$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_fps_failed_order_status_id'),$message, FALSE);
+				$this->model_checkout_order->update($this->request->post['order_number'], $this->config->get('op_unionpay_failed_order_status_id'),$message, FALSE);
 				
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl')) {
-					$this->template = $this->config->get('config_template') . '/template/payment/op_fps_failure.tpl';
+				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl')) {
+					$this->template = $this->config->get('config_template') . '/template/payment/op_unionpay_failure.tpl';
 				} else {
-					$this->template = 'default/template/payment/op_fps_failure.tpl';
+					$this->template = 'default/template/payment/op_unionpay_failure.tpl';
 				}
 			}
 		}
@@ -552,9 +539,9 @@ class ControllerPaymentOPFps extends Controller {
 		
 				
 			//匹配终端号
-			if($_REQUEST['terminal'] == $this->config->get('op_fps_terminal')){
+			if($_REQUEST['terminal'] == $this->config->get('op_unionpay_terminal')){
 				//普通终端号
-				$securecode = $this->config->get('op_fps_securecode');
+				$securecode = $this->config->get('op_unionpay_securecode');
 			}else{
 				$securecode = '';
 			}
@@ -601,17 +588,17 @@ class ControllerPaymentOPFps extends Controller {
 				}else{
 					if ($_REQUEST['payment_status'] == 1 ){
 						//交易成功
-						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_fps_success_order_status_id'), $message, false);
+						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_unionpay_success_order_status_id'), $message, false);
 					}elseif ($_REQUEST['payment_status'] == -1){
 						//交易待处理
 						//是否预授权交易
 						if($_REQUEST['payment_authType'] == 1){
 							$message .= '(Pre-auth)';
 						}
-						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_fps_pending_order_status_id'), $message, false);
+						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_unionpay_pending_order_status_id'), $message, false);
 					}else{
 						//交易失败
-						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_fps_failed_order_status_id'), $message, false);
+						$this->model_checkout_order->update($_REQUEST['order_number'], $this->config->get('op_unionpay_failed_order_status_id'), $message, false);
 					}
 				}	
 			}
@@ -818,7 +805,7 @@ class ControllerPaymentOPFps extends Controller {
 	 */
 	public function getLocalMessage($ErrorCode)
 	{
-		$this->language->load('payment/op_fps');
+		$this->language->load('payment/op_unionpay');
 		
 		$CodeAction = array(
 				'80010' => $this->language->get('text_actionMsg_1'),
