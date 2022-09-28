@@ -531,11 +531,7 @@ class ControllerPaymentOPUnionpay extends Controller {
 			$_REQUEST['payment_risk'] 	  = $xml->getElementsByTagName("payment_risk")->item(0)->nodeValue;
 		
 			$_REQUEST['notice_type'] 	  = $xml->getElementsByTagName("notice_type")->item(0)->nodeValue;
-			$_REQUEST['payment_dateTime'] = $xml->getElementsByTagName("payment_dateTime")->item(0)->nodeValue;
 			$_REQUEST['push_dateTime'] 	  = $xml->getElementsByTagName("push_dateTime")->item(0)->nodeValue;
-			$_REQUEST['push_id'] 	  	  = $xml->getElementsByTagName("push_id")->item(0)->nodeValue;
-			$_REQUEST['push_status'] 	  = $xml->getElementsByTagName("push_status")->item(0)->nodeValue;
-			$_REQUEST['push_details'] 	  = $xml->getElementsByTagName("push_details")->item(0)->nodeValue;
 		
 				
 			//匹配终端号
@@ -611,62 +607,17 @@ class ControllerPaymentOPUnionpay extends Controller {
 			$this->AbnormalLog(self::Abnormal);
 			
 			//SHA256加密
-			$local_signValue   = hash("sha256",$_REQUEST['account'].$_REQUEST['terminal'].$_REQUEST['order_number'].$_REQUEST['payment_id'].$_REQUEST['push_id'].$_REQUEST['push_status'].$_REQUEST['push_details'].$securecode);
-				
+			$local_signValue = hash("sha256",$_REQUEST['account'].$_REQUEST['terminal'].$_REQUEST['order_number'].$_REQUEST['order_currency'].$_REQUEST['order_amount'].$_REQUEST['order_notes'].$_REQUEST['card_number'].
+				$_REQUEST['payment_id'].$_REQUEST['payment_authType'].$_REQUEST['payment_status'].$_REQUEST['payment_details'].$_REQUEST['payment_risk'].$securecode);
+
 			//数据签名对比
 			if (strtoupper($local_signValue) == strtoupper($_REQUEST['signValue'])) {
-			
-				switch($_REQUEST['notice_type']){
-					case 'refund':
-						//退款
-						if($_REQUEST['push_status'] == 1){
-							$AbnormalResult = 'Refund Successful.';
-						}elseif($_REQUEST['push_status'] == 0){
-							$AbnormalResult = 'Refund Failed.';
-						}
-			
-						break;
-					case 'chargeBack':
-						//拒付
-						if($_REQUEST['push_status'] == 1){
-							$AbnormalResult = 'ChargeBack!';
-						}
-			
-						break;
-					case 're-presentment':
-						//申诉
-						if($_REQUEST['push_status'] == 1){
-							$AbnormalResult = 'Re-presentment Successful.';
-						}elseif($_REQUEST['push_status'] == 0){
-							$AbnormalResult = 'Re-presentment Failed.';
-						}elseif($_REQUEST['push_status'] == 2){
-							$AbnormalResult = 'Re-presentment Pending.';
-						}
-			
-						break;
-					case 'retrieval':
-						//调单
-						if($_REQUEST['push_status'] == 1){
-							$AbnormalResult = 'Retrieval!';
-						}
-							
-						break;
-					case 'reversal-retrieval':
-						//调单变正常
-						if($_REQUEST['push_status'] == 1){
-							$AbnormalResult = 'Reversal-retrieval!';
-						}
-							
-						break;
-					default:
-						$AbnormalResult = '';
-				}
 			
 				$this->load->model('checkout/order');
 			
 				$message = '';
-				$message .= self::Abnormal . $AbnormalResult;
-				$message .= 'payment_id:' . $_REQUEST['payment_id'] . ' | push_id:' . $_REQUEST['push_id'] . ' | push_dateTime:' . $_REQUEST['push_dateTime'] . ' | details:' . $_REQUEST['push_details'] . "\n";
+				$message .= self::Abnormal;
+				$message .= 'payment_id:' . $_REQUEST['payment_id'] . ' | push_dateTime:' . $_REQUEST['push_dateTime'] . "\n";
 			
 				//获取原本的订单状态
 				$order_info = $this->model_checkout_order->getOrder($_REQUEST['order_number']);
@@ -728,11 +679,7 @@ class ControllerPaymentOPUnionpay extends Controller {
 				"terminal = "            . $_REQUEST['terminal'] . "\r\n".
 				"payment_id = "          . $_REQUEST['payment_id'] . "\r\n".
 				"order_number = "        . $_REQUEST['order_number'] . "\r\n".
-				"push_id = "      		 . $_REQUEST['push_id'] . "\r\n".
-				"push_status = "         . $_REQUEST['push_status'] . "\r\n".
-				"payment_dateTme = "    . $_REQUEST['payment_dateTime'] . "\r\n".
 				"push_dateTime = "       . $_REQUEST['push_dateTime'] . "\r\n".
-				"push_details = "        . $_REQUEST['push_details'] . "\r\n".
 				"signValue = "        	 . $_REQUEST['signValue'] . "\r\n";
 	
 		$return_log = $return_log . "*************************************\r\n";
