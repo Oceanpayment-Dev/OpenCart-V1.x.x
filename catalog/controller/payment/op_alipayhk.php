@@ -598,6 +598,7 @@ class ControllerPaymentOPAlipayhk extends Controller {
 					}
 				}	
 			}
+			echo "receive-ok";
 		}
 		
 		
