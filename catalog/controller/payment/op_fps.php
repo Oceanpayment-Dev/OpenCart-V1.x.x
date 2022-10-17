@@ -611,6 +611,7 @@ class ControllerPaymentOPFps extends Controller {
 					}
 				}	
 			}
+			echo "receive-ok";
 		}
 		
 		
