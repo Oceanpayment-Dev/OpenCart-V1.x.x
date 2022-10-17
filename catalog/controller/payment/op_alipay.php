@@ -598,6 +598,7 @@ class ControllerPaymentOPAlipay extends Controller {
 					}
 				}	
 			}
+			echo "receive-ok";
 		}
 		
 		
