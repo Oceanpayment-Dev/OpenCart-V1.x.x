@@ -608,6 +608,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 					}
 				}	
 			}
+			echo "receive-ok";
 		}
 		
 		
@@ -633,6 +634,7 @@ class ControllerPaymentOPWechatPay extends Controller {
 				$order_info = $this->model_checkout_order->getOrder($_REQUEST['order_number']);
 				$this->model_checkout_order->update($_REQUEST['order_number'], $order_info['order_status_id'], $message, false);
 			}
+
 		}
 
 		
