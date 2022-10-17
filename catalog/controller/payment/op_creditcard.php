@@ -635,6 +635,7 @@ class ControllerPaymentOPCreditCard extends Controller {
                     }
                 }
             }
+            echo "receive-ok";
         }
 
 
