@@ -598,6 +598,7 @@ class ControllerPaymentOPUnionpay extends Controller {
 					}
 				}	
 			}
+			echo "receive-ok";
 		}
 		
 		
