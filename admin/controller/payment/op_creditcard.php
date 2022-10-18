@@ -32,8 +32,6 @@ class ControllerPaymentOPCreditCard extends Controller {
         $this->data['text_select_currency'] = $this->language->get('text_select_currency');
         $this->data['text_code_online'] = $this->language->get('text_code_online');
         $this->data['text_code_local'] = $this->language->get('text_code_local');
-        $this->data['text_3d_on'] = $this->language->get('text_3d_on');
-        $this->data['text_3d_off'] = $this->language->get('text_3d_off');
         $this->data['text_select_all'] = $this->language->get('text_select_all');
         $this->data['text_unselect_all'] = $this->language->get('text_unselect_all');
         $this->data['text_logs_true'] = $this->language->get('text_logs_true');
@@ -43,12 +41,7 @@ class ControllerPaymentOPCreditCard extends Controller {
         $this->data['entry_account'] = $this->language->get('entry_account');
         $this->data['entry_terminal'] = $this->language->get('entry_terminal');
         $this->data['entry_securecode'] = $this->language->get('entry_securecode');
-        $this->data['entry_3d'] = $this->language->get('entry_3d');
-        $this->data['entry_3d_terminal'] = $this->language->get('entry_3d_terminal');
-        $this->data['entry_3d_securecode'] = $this->language->get('entry_3d_securecode');
-        $this->data['entry_currencies'] = $this->language->get('entry_currencies');
-        $this->data['entry_currencies_value'] = $this->language->get('entry_currencies_value');
-        $this->data['entry_countries'] = $this->language->get('entry_countries');
+
         $this->data['entry_transaction'] = $this->language->get('entry_transaction');
         $this->data['entry_pay_mode'] = $this->language->get('entry_pay_mode');
 
@@ -133,53 +126,6 @@ class ControllerPaymentOPCreditCard extends Controller {
         } else {
             $this->data['op_creditcard_securecode'] = $this->config->get('op_creditcard_securecode');
         }
-
-
-        if (isset($this->request->post['op_creditcard_3d'])) {
-            $this->data['op_creditcard_3d'] = $this->request->post['op_creditcard_3d'];
-        } else {
-            $this->data['op_creditcard_3d'] = $this->config->get('op_creditcard_3d');
-        }
-
-        if (isset($this->request->post['op_creditcard_3d_terminal'])) {
-            $this->data['op_creditcard_3d_terminal'] = $this->request->post['op_creditcard_3d_terminal'];
-        } else {
-            $this->data['op_creditcard_3d_terminal'] = $this->config->get('op_creditcard_3d_terminal');
-        }
-
-        if (isset($this->request->post['op_creditcard_3d_securecode'])) {
-            $this->data['op_creditcard_3d_securecode'] = $this->request->post['op_creditcard_3d_securecode'];
-        } else {
-            $this->data['op_creditcard_3d_securecode'] = $this->config->get('op_creditcard_3d_securecode');
-        }
-
-        $this->load->model('localisation/currency');
-        $results = $this->model_localisation_currency->getCurrencies();
-        foreach ($results as $result) {
-            $this->data['currencies'][] = $result['code'];
-        }
-
-
-        if (isset($this->request->post['op_creditcard_currencies_value'])) {
-            $this->data['op_creditcard_currencies_value'] = $this->request->post['op_creditcard_currencies_value'];
-        } else {
-            $this->data['op_creditcard_currencies_value'] = $this->config->get('op_creditcard_currencies_value');
-        }
-
-
-
-
-        $this->load->model('localisation/country');
-        $this->data['countries'] = $this->model_localisation_country->getCountries();
-
-        if (isset($this->request->post['op_creditcard_country_array'])) {
-            $this->data['op_creditcard_country_array'] = $this->request->post['op_creditcard_country_array'];
-        } elseif ($this->config->has('op_creditcard_country_array')) {
-            $this->data['op_creditcard_country_array'] = $this->config->get('op_creditcard_country_array');
-        } else {
-            $this->data['op_creditcard_country_array'] = array();
-        }
-
 
 
         $this->data['callback'] = HTTP_CATALOG . 'index.php?route=payment/op_creditcard/callback';
