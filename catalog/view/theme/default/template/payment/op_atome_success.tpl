@@ -18,7 +18,7 @@ function auto(){
   <h1><?php echo $heading_title; ?></h1>
   <p><?php echo $text_response; ?></p>
   <div style="border: 1px solid #DDDDDD; margin-bottom: 20px; width: 350px; margin-left: auto; margin-right: auto;">
-    <creditcard ITEM=banner>
+    <atome ITEM=banner>
   </div>
   <p><?php echo $text_success; ?></p>
   <p><?php echo 'Your Order No. is:'.$text_order_number; ?></p>
